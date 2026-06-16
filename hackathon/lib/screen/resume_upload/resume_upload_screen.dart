@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
 import 'package:lottie/lottie.dart';
 // import 'package:pdfrx/pdfrx.dart';
 import 'package:provider/provider.dart';
-import 'package:resume_xpert/features/data/get_userData.dart';
-import 'package:resume_xpert/features/presentation/screens/ResumeUploadScreen/controller/homeController.dart';
 
 class ResumeUploadScreen extends StatefulWidget {
   const ResumeUploadScreen({super.key});
@@ -72,7 +71,7 @@ class _ResumeUploadScreenState extends State<ResumeUploadScreen> {
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(color: Colors.black12),
                 ),
-                child: Consumer<Homecontroller>(
+                child: Consumer<ResumeUploadController>(
                   builder: (context, controller, child) =>
                       controller.fileName != ""
                       ? pdfCard(fileName: controller.fileName)
@@ -105,7 +104,7 @@ class _ResumeUploadScreenState extends State<ResumeUploadScreen> {
                             //----------------------- btn
                             GestureDetector(
                               onTap: () {
-                                context.read<Homecontroller>().pickFile();
+                                context.read<ResumeUploadController>().pickFile();
                               },
                               child: Container(
                                 width: 200,
@@ -226,7 +225,7 @@ class _ResumeUploadScreenState extends State<ResumeUploadScreen> {
                     gradient: LinearGradient(colors: [Colors.pink, Colors.red]),
                   ),
                   child: ElevatedButton(
-                    onPressed: () => Provider.of<Homecontroller>(
+                    onPressed: () => Provider.of<ResumeUploadController>(
                       context,
                       listen: false,
                     ).onCancel(),
@@ -250,7 +249,7 @@ class _ResumeUploadScreenState extends State<ResumeUploadScreen> {
                   ),
 
                   child: ElevatedButton(
-                    onPressed: () => Provider.of<Homecontroller>(
+                    onPressed: () => Provider.of<ResumeUploadController>(
                       context,
                       listen: false,
                     ).onSubmit(context),

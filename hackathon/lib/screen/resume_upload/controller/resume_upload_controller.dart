@@ -2,18 +2,10 @@ import 'dart:developer';
 import 'package:doc_text_extractor/doc_text_extractor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:hackathon/auth/ai_feature.dart';
+import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/widgets/custom_Snackbar.dart';
-=======
-import 'package:go_router/go_router.dart';
->>>>>>> ce53a01bc77cfe59101f9b4f2080f250c3b826cb
 import 'package:provider/provider.dart';
-import 'package:resume_xpert/features/auth/aiFeature/ai_feature.dart';
-import 'package:resume_xpert/features/auth/historyFeature/history_feature.dart';
-import 'package:resume_xpert/features/presentation/screens/resultScreen/controller/result_controller.dart';
-import 'package:resume_xpert/features/presentation/widgets/custom_Snackbar.dart';
-
 class ResumeUploadController extends ChangeNotifier {
   String fileName = "";
   String pdfPath = "";
@@ -68,7 +60,7 @@ class ResumeUploadController extends ChangeNotifier {
   //              onSubmit
   void onSubmit(BuildContext context) async {
     // final router = GoRouter.of(context);
-    final resultController = context.read<ResultController>();
+    final resultController = context.read<ResumeResultController>();
     if (!validateResume(pdfText)) {
       customSnackbar(
         context: context,
@@ -78,7 +70,7 @@ class ResumeUploadController extends ChangeNotifier {
       );
       return;
     }
-    router.go('/analyzing');
+    // router.go('/analyzing');
     final data = await AiFeature.openRouterAI(pdfText);
     if (data != null) {
       resultController.respons = data;
