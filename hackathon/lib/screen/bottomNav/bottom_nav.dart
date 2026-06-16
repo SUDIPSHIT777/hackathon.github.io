@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hackathon/screen/chatboat/ui/chatboatui.dart';
 import 'package:hackathon/screen/home/home_screen.dart';
-import 'package:hackathon/screen/profile/profile.dart';
 import 'package:hackathon/screen/resume_upload/resume_upload_screen.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
@@ -91,6 +89,6 @@ class _BottomNavState extends State<BottomNav> {
 List<Widget> _listOfWidget = <Widget>[
   HomeScreen(),
   ResumeUploadScreen(),
-  ChatScreen(),
-  ProfileScreen(),
+  HomeScreen(),
+  HomeScreen(),
 ];

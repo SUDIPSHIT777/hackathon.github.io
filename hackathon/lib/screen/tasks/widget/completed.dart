@@ -17,13 +17,7 @@ class Completed extends StatelessWidget {
             .where((task) => task.isCompleted)
             .toList();
         if (completedTasks.isEmpty) {
-          return Center(
-            child: Lottie.asset(
-              "assets/taskcompleted.json",
-              alignment: Alignment.center,
-              height: 300,
-            ),
-          );
+          return Center(child: Text("nsdkfn"));
         }
         return ListView.builder(
           itemCount: completedTasks.length,

@@ -13,6 +13,7 @@ import 'package:hackathon/screen/resume_upload/controller/resume_upload_controll
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
+import 'package:hackathon/screen/tasks/ui/taskpageui.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,16 +46,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
 
-  const MyApp({
-    super.key,
-    required this.isLoggedIn,
-  });
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNav(),
+      home: Taskpageui(),
       // home: ResumeAnalysisResultsScreen(page: '',),
     );
   }
