@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
+import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
+import 'package:hackathon/screen/tasks/model/taskmodel.dart';
+import 'package:hackathon/screen/tasks/widget/datetimecard.dart';
 import 'package:provider/provider.dart';
-import 'package:lifeos/model/taskmodel.dart';
-import 'package:lifeos/feature/tasks/controller/taskprovider.dart';
-import 'package:lifeos/feature/tasks/controller/allupdatefunction.dart';
-import 'package:lifeos/feature/tasks/widget/datetimecard.dart';
 
 class Taskdetails extends StatefulWidget {
   final TaskModel alltaskdetails;
@@ -61,7 +61,7 @@ class _TaskdetailsState extends State<Taskdetails> {
         ),
         centerTitle: true,
         leading: InkWell(
-          onTap: () => context.pop(),
+          onTap: () => Get.back(),
           child: Icon(Icons.arrow_back_ios),
         ),
       ),

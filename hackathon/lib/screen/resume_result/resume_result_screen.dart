@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hackathon/model/aiRespons_model.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
+
 class ResultScreen extends StatefulWidget {
   final String page;
   const ResultScreen({super.key, required this.page});
@@ -22,10 +24,8 @@ class _ResultScreenState extends State<ResultScreen> {
         appBar: AppBar(
           leading: IconButton(
             // --------------------------- need to modify
-            onPressed: () {
-              // widget.page == "home" ? context.go("/home") : context.pop()
-              }, icon: ,;
-                
+            onPressed: () {},
+            // widget.page == "home" ? context.go("/home") : context.pop(),
             icon: Icon(Icons.arrow_back),
           ),
           backgroundColor: Colors.white,
