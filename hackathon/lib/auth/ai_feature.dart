@@ -1,11 +1,9 @@
 import 'dart:developer';
 
-
 import 'package:hackathon/config/app_config.dart';
 import 'package:hackathon/model/aiRespons_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 
 class AiFeature {
   // ------------ Openrouter
@@ -61,7 +59,7 @@ $resumeText
 """;
     try {
       final response = await http.post(
-        Uri.parse('https://openrouter.ai/api/v1/chat/completions'),
+        Uri.parse(AppConfig.api),
         headers: {
           'Authorization': 'Bearer ${AppConfig.apikey}',
           'Content-Type': 'application/json',
