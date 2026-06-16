@@ -2,11 +2,8 @@ import 'dart:developer';
 import 'package:doc_text_extractor/doc_text_extractor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:hackathon/widgets/custom_Snackbar.dart';
 import 'package:provider/provider.dart';
-import 'package:resume_xpert/features/auth/aiFeature/ai_feature.dart';
-import 'package:resume_xpert/features/auth/historyFeature/history_feature.dart';
-import 'package:resume_xpert/features/presentation/screens/resultScreen/controller/result_controller.dart';
-import 'package:resume_xpert/features/presentation/widgets/custom_Snackbar.dart';
 
 class ResumeUploadController extends ChangeNotifier {
   String fileName = "";
@@ -61,7 +58,6 @@ class ResumeUploadController extends ChangeNotifier {
 
   //              onSubmit
   void onSubmit(BuildContext context) async {
-    final router = GoRouter.of(context);
     final resultController = context.read<ResultController>();
     if (!validateResume(pdfText)) {
       customSnackbar(
@@ -72,7 +68,7 @@ class ResumeUploadController extends ChangeNotifier {
       );
       return;
     }
-    router.go('/analyzing');
+    // router.go('/analyzing');
     final data = await AiFeature.openRouterAI(pdfText);
     if (data != null) {
       resultController.respons = data;
