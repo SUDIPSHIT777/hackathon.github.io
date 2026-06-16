@@ -43,19 +43,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Get.to(() => ChatScreen());
-      //   },
-      //   backgroundColor: const Color(
-      //     0xFF00E5FF,
-      //   ), // Accent Cyan matching your UI
-      //   child: const Icon(
-      //     Icons.psychology_outlined, // Clean AI/Mind icon
-      //     color: Color(0xff051429), // Dark contrast icon color
-      //     size: 28,
-      //   ),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.to(() => ChatScreen());
+        },
+        backgroundColor: const Color(
+          0xFF00E5FF,
+        ), // Accent Cyan matching your UI
+        child: const Icon(
+          Icons.psychology_outlined, // Clean AI/Mind icon
+          color: Color(0xff051429), // Dark contrast icon color
+          size: 28,
+        ),
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           bool isTablet = constraints.maxWidth > 600;

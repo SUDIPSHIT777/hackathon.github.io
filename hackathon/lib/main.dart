@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +9,7 @@ import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
 import 'package:hackathon/screen/explore_careers/degree_chooser/controller/DegreeChooserController.dart';
 import 'package:hackathon/screen/explore_careers/path_chooser/controller/path_chooser_controller.dart';
+import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
 import 'package:hackathon/screen/signup/authwrapper.dart';
@@ -33,9 +35,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => DegreeChooserController()),
         ChangeNotifierProvider(create: (_) => CareerPathController()),
-        ChangeNotifierProvider(
-  create: (_) => AuthController(),
-),
+        ChangeNotifierProvider(create: (_) => AuthController()),
       ],
       child: MyApp(),
     ),
@@ -58,7 +58,9 @@ class MyApp extends StatelessWidget {
           surface: const Color(0xff051429), // For fallback surface blends
         ),
       ),
-      home: BottomNav(),
+      home: FirebaseAuth.instance.currentUser != null
+          ? const BottomNav()
+          : const LoginScreen(),
       // home: const CareerPathReadyScreen(),
     );
   }
