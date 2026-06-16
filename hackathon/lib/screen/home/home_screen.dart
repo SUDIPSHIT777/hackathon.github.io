@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hackathon/screen/internship/ui/internship.dart';
 import 'package:hackathon/screen/resume_upload/resume_upload_screen.dart';
 import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_screen.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
@@ -296,7 +297,7 @@ class _QuickAccessGrid extends StatelessWidget {
         transition: Transition.rightToLeft,
       ), // explore careers
       () => Get.to(
-        () => const ResumeUploadScreen(),
+        () => const InternshipDashboard(),
         transition: Transition.rightToLeft,
       ), // intership finder
     ];
@@ -316,11 +317,7 @@ class _QuickAccessGrid extends StatelessWidget {
         Icons.explore_outlined,
         const Color(0xFF2196F3),
       ),
-      _GridItemData(
-        'Internship\nFinder',
-        Icons.business_center_outlined,
-        const Color(0xFF9C27B0),
-      ),
+      _GridItemData('Internship\nFinder', Icons.work, const Color(0xFF2196F3)),
     ];
 
     return GridView.builder(
