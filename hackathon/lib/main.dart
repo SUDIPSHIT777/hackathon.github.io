@@ -4,42 +4,77 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hackathon/firebase_options.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
+import 'package:hackathon/screen/home/home_screen.dart';
+import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
-import 'package:hackathon/test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load SharedPreferences
+  final prefs = await SharedPreferences.getInstance();
+  final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+  // Load environment variables
   await dotenv.load(fileName: '.env');
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ResumeUploadController()),
-        ChangeNotifierProvider(create: (context) => ResumeResultController()),
-        ChangeNotifierProvider(create: (context) => DateTimeProvider()),
-        ChangeNotifierProvider(create: (context) => Taskprovider()),
-        ChangeNotifierProvider(create: (context) => Userprovider()),
-        ChangeNotifierProvider(create: (context) => ChatProvider()),
-
+        ChangeNotifierProvider(
+          create: (_) => ResumeUploadController(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ResumeResultController(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DateTimeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Taskprovider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Userprovider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(),
+        ),
       ],
-      child: const MyApp(),
+      child: MyApp(isLoggedIn: isLoggedIn),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  const MyApp({
+    super.key,
+    required this.isLoggedIn,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNav(),
+      title: 'Hackathon App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: isLoggedIn
+          ? const BottomNav()
+          : const LoginScreen(),
     );
   }
 }
