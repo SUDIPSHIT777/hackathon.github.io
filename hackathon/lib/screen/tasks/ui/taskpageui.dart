@@ -2,13 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
-import 'package:hackathon/screen/tasks/controller/userprovider.dart';
 import 'package:hackathon/screen/tasks/model/taskmodel.dart';
 import 'package:hackathon/screen/tasks/ui/taskaddui.dart';
 import 'package:hackathon/screen/tasks/widget/completed.dart';
 import 'package:hackathon/screen/tasks/widget/snackbardesign.dart';
 import 'package:hackathon/screen/tasks/widget/taskpersentage.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class Taskpageui extends StatefulWidget {
@@ -25,6 +23,15 @@ class _TaskpageuiState extends State<Taskpageui>
 
   bool _snackbarShown = false;
 
+  // Dark Theme Colors Based on Design
+  final Color bgColor = const Color(0xFF0A0E17);
+  final Color cardColor = const Color(0xFF131826);
+  final Color borderColor = const Color(0xFF262D47);
+  final Color primaryNeon = const Color(0xFF00E5FF);
+  final Color secondaryNeon = const Color(0xFF2979FF);
+  final Color textPrimary = Colors.white;
+  final Color textSecondary = const Color(0xFF8B95A5);
+
   @override
   void initState() {
     super.initState();
@@ -34,10 +41,14 @@ class _TaskpageuiState extends State<Taskpageui>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF6F6F8),
+      backgroundColor: bgColor,
+      appBar: AppBar(
+        title: Text("Goals", style: GoogleFonts.poppins()),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
               // ================== PROGRESS ==================
@@ -82,7 +93,7 @@ class _TaskpageuiState extends State<Taskpageui>
                       Snackbardesign.showCustomSnackbar(
                         title: "Task Completed",
                         subtitle: "Congratulations You completed your task",
-                        backgroundColor: Color(0xFF00c247),
+                        backgroundColor: const Color(0xFF00c247),
                         icon: Icons.download_done_rounded,
                       );
                     });
@@ -96,59 +107,50 @@ class _TaskpageuiState extends State<Taskpageui>
                 },
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
 
               // ================== TAB BAR ==================
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: cardColor,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.06),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                    BoxShadow(
-                      color: Colors.blue.withValues(alpha: 0.08),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                  border: Border.all(
-                    color: Colors.blue.withValues(alpha: 0.08),
-                    width: 1,
-                  ),
+                  border: Border.all(color: borderColor, width: 1.5),
                 ),
                 child: TabBar(
                   controller: _tabController,
                   splashFactory: NoSplash.splashFactory,
                   overlayColor: WidgetStateProperty.all(Colors.transparent),
                   dividerColor: Colors.transparent,
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.grey.shade600,
+                  labelColor: textPrimary,
+                  unselectedLabelColor: textSecondary,
+                  labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                  unselectedLabelStyle: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w400,
+                  ),
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    gradient: const LinearGradient(
-                      colors: [Color(0xff4F46E5), Color(0xff7C3AED)],
+                    gradient: LinearGradient(
+                      colors: [primaryNeon, secondaryNeon],
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xff7C3AED).withValues(alpha: 0.35),
-                        blurRadius: 8,
-                        offset: Offset(0, 3),
+                        color: secondaryNeon.withValues(alpha: 0.4),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
                   indicatorPadding: const EdgeInsets.symmetric(horizontal: -15),
                   tabs: const [
-                    Tab(text: "All Tasks"),
+                    Tab(text: "All Goals"),
                     Tab(text: "Completed"),
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
+
+              // ================== TAB VIEWS ==================
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
@@ -160,7 +162,11 @@ class _TaskpageuiState extends State<Taskpageui>
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: primaryNeon,
+                            ),
+                          );
                         }
 
                         if (snapshot.hasData) {
@@ -182,8 +188,19 @@ class _TaskpageuiState extends State<Taskpageui>
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const SizedBox(height: 12),
-                                Text("data"),
+                                Icon(
+                                  Icons.task_alt,
+                                  size: 60,
+                                  color: borderColor,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  "No tasks pending",
+                                  style: GoogleFonts.poppins(
+                                    color: textSecondary,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ],
                             ),
                           );
@@ -201,18 +218,27 @@ class _TaskpageuiState extends State<Taskpageui>
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  taskprovider.formatDate(date),
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w500,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 4.0,
+                                    bottom: 8.0,
+                                    top: 8.0,
+                                  ),
+                                  child: Text(
+                                    taskprovider.formatDate(date),
+                                    style: GoogleFonts.poppins(
+                                      color: primaryNeon,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 0.5,
+                                    ),
                                   ),
                                 ),
-
                                 ListView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: dateTasks.length,
-                                  padding: const EdgeInsets.all(12),
+                                  padding: const EdgeInsets.only(bottom: 12),
                                   itemBuilder: (context, index) {
                                     final task = dateTasks[index];
 
@@ -220,42 +246,69 @@ class _TaskpageuiState extends State<Taskpageui>
                                       onTap: () {},
                                       child: Container(
                                         margin: const EdgeInsets.only(
-                                          bottom: 10,
+                                          bottom: 12,
                                         ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 12,
-                                        ),
+                                        padding: const EdgeInsets.all(14),
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: cardColor,
                                           borderRadius: BorderRadius.circular(
                                             16,
                                           ),
+                                          border: Border.all(
+                                            color: borderColor,
+                                            width: 1.2,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withValues(
+                                                alpha: 0.2,
+                                              ),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
                                         ),
                                         child: Row(
                                           children: [
-                                            Transform.scale(
-                                              scale: 1.2,
-                                              child: Checkbox(
-                                                value: task.isCompleted,
-                                                onChanged: (_) async {
-                                                  await taskprovider.toggleTask(
-                                                    task,
-                                                  );
-                                                  if (task.isCompleted) {
-                                                    taskprovider.playAudio();
-                                                  }
-                                                },
-                                                checkColor: Colors.white,
-                                                activeColor: Colors.blue,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
+                                            Checkbox(
+                                              value: task.isCompleted,
+                                              onChanged: (_) async {
+                                                await taskprovider.toggleTask(
+                                                  task,
+                                                );
+                                              },
+                                              fillColor:
+                                                  WidgetStateProperty.resolveWith(
+                                                    (states) {
+                                                      if (states.contains(
+                                                        WidgetState.selected,
+                                                      )) {
+                                                        return primaryNeon;
+                                                      }
+                                                      return Colors.transparent;
+                                                    },
+                                                  ),
+                                              side:
+                                                  WidgetStateBorderSide.resolveWith(
+                                                    (states) {
+                                                      return BorderSide(
+                                                        color:
+                                                            states.contains(
+                                                              WidgetState
+                                                                  .selected,
+                                                            )
+                                                            ? primaryNeon
+                                                            : textSecondary,
+                                                        width: 1.5,
+                                                      );
+                                                    },
+                                                  ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
                                               ),
                                             ),
-                                            const SizedBox(width: 10),
-
+                                            const SizedBox(width: 8),
                                             Expanded(
                                               child: Column(
                                                 crossAxisAlignment:
@@ -263,82 +316,93 @@ class _TaskpageuiState extends State<Taskpageui>
                                                 children: [
                                                   Text(
                                                     task.title,
-                                                    style: TextStyle(
+                                                    style: GoogleFonts.poppins(
                                                       fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.w600,
+                                                          FontWeight.w500,
                                                       decoration:
                                                           task.isCompleted
                                                           ? TextDecoration
                                                                 .lineThrough
                                                           : null,
                                                       color: task.isCompleted
-                                                          ? Colors.grey
-                                                          : Colors.black,
+                                                          ? textSecondary
+                                                          : textPrimary,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 6),
                                                   Row(
                                                     children: [
-                                                      Image.asset(
-                                                        "assets/calendar.png",
-                                                        scale: 25,
+                                                      Icon(
+                                                        Icons.calendar_today,
+                                                        size: 12,
+                                                        color: textSecondary,
                                                       ),
                                                       const SizedBox(width: 5),
-                                                      Text(
-                                                        task.date != null
-                                                            ? "${task.date!.day}/${task.date!.month}/${task.date!.year}"
-                                                            : "No date",
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                            ),
+                                                      Flexible(
+                                                        flex: 2,
+                                                        child: Text(
+                                                          task.date != null
+                                                              ? "${task.date!.day}/${task.date!.month}/${task.date!.year}"
+                                                              : "No date",
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              GoogleFonts.poppins(
+                                                                fontSize: 12,
+                                                                color:
+                                                                    textSecondary,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 12),
+                                                      Icon(
+                                                        Icons.access_time,
+                                                        size: 12,
+                                                        color: textSecondary,
                                                       ),
                                                       const SizedBox(width: 5),
-                                                      Image.asset(
-                                                        "assets/waste.png",
-                                                        scale: 25,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        task.time?.format(
-                                                              context,
-                                                            ) ??
-                                                            "No time",
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                            ),
+                                                      Flexible(
+                                                        child: Text(
+                                                          task.time?.format(
+                                                                context,
+                                                              ) ??
+                                                              "No time",
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              GoogleFonts.poppins(
+                                                                fontSize: 12,
+                                                                color:
+                                                                    textSecondary,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                              ),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
                                                 ],
                                               ),
                                             ),
-
                                             Consumer<Taskprovider>(
                                               builder: (context, taskcolor, _) {
+                                                final priorityColor = taskcolor
+                                                    .getPriorityColor(
+                                                      task.priority,
+                                                    );
                                                 return Container(
                                                   padding:
                                                       const EdgeInsets.symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 5,
+                                                        horizontal: 10,
+                                                        vertical: 6,
                                                       ),
                                                   decoration: BoxDecoration(
-                                                    color: taskcolor
-                                                        .getPriorityColor(
-                                                          task.priority,
-                                                        )
+                                                    color: priorityColor
                                                         .withValues(
                                                           alpha: 0.15,
                                                         ),
@@ -346,6 +410,13 @@ class _TaskpageuiState extends State<Taskpageui>
                                                         BorderRadius.circular(
                                                           20,
                                                         ),
+                                                    border: Border.all(
+                                                      color: priorityColor
+                                                          .withValues(
+                                                            alpha: 0.3,
+                                                          ),
+                                                      width: 1,
+                                                    ),
                                                   ),
                                                   child: Row(
                                                     mainAxisSize:
@@ -357,24 +428,21 @@ class _TaskpageuiState extends State<Taskpageui>
                                                               task.priority,
                                                             ),
                                                         size: 14,
-                                                        color: taskcolor
-                                                            .getPriorityColor(
-                                                              task.priority,
-                                                            ),
+                                                        color: priorityColor,
                                                       ),
                                                       const SizedBox(width: 4),
                                                       Text(
                                                         task.priority
                                                             .toUpperCase(),
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: taskcolor
-                                                              .getPriorityColor(
-                                                                task.priority,
-                                                              ),
-                                                        ),
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  priorityColor,
+                                                            ),
                                                       ),
                                                     ],
                                                   ),
@@ -401,13 +469,30 @@ class _TaskpageuiState extends State<Taskpageui>
           ),
         ),
       ),
-
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF1976ED),
-        onPressed: () {
-          openTaskBottomSheet(context);
-        },
-        child: Icon(Icons.add_circle, size: 28, color: Colors.white),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            colors: [primaryNeon, secondaryNeon],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: secondaryNeon.withValues(alpha: 0.5),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: FloatingActionButton(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          onPressed: () {
+            openTaskBottomSheet(context);
+          },
+          child: const Icon(Icons.add, size: 30, color: Colors.white),
+        ),
       ),
     );
   }

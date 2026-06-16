@@ -285,10 +285,7 @@ class Taskprovider extends ChangeNotifier {
   }
 
   // ====================== Audio ====================
-  final AudioPlayer _player = AudioPlayer();
-  Future<void> playAudio() async {
-    await _player.play(AssetSource("pop.mp3"));
-  }
+
 
   // =============== Group Task =================
   Map<DateTime, List<TaskModel>> groupTasks(List<TaskModel> tasks) {

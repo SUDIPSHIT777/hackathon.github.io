@@ -6,25 +6,17 @@ import 'package:hackathon/config/app_config.dart';
 import 'package:hackathon/firebase_options.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
-import 'package:hackathon/screen/home/home_screen.dart';
-import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
-import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_screen.dart';
+import 'package:hackathon/screen/signup/authwrapper.dart';
+import 'package:hackathon/screen/signup/signup.dart';
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
-import 'package:hackathon/screen/tasks/ui/taskpageui.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Load SharedPreferences
-  final prefs = await SharedPreferences.getInstance();
-  final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-
   // Load environment variables
   await dotenv.load(fileName: '.env');
   AppConfig.loadeApikey();
@@ -39,24 +31,18 @@ void main() async {
         ChangeNotifierProvider(create: (context) => Userprovider()),
         ChangeNotifierProvider(create: (context) => ChatProvider()),
       ],
-      child: MyApp(isLoggedIn: isLoggedIn),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  final bool isLoggedIn;
-
-  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-<<<<<<< HEAD
-      home: Taskpageui(),
-      // home: ResumeAnalysisResultsScreen(page: '',),
-=======
       title: 'Career Compass',
       // Define a unified dark theme
       theme: ThemeData.dark().copyWith(
@@ -66,9 +52,8 @@ class MyApp extends StatelessWidget {
           surface: const Color(0xff051429), // For fallback surface blends
         ),
       ),
-      home: BottomNav(),
+      home: AuthWrapper(),
       // home: const ChooseStreamScreen(),
->>>>>>> e60bce106835aea4c2c212ca2798370fb4b13fd9
     );
   }
 }

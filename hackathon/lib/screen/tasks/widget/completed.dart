@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/ui/taskdetails.dart';
 import 'package:hackathon/screen/tasks/widget/deletetask.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class Completed extends StatelessWidget {
@@ -11,15 +10,42 @@ class Completed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Dark Theme Colors Based on Design
+    final Color cardColor = const Color(0xFF131826);
+    final Color borderColor = const Color(0xFF262D47);
+    final Color primaryNeon = const Color(0xFF00E5FF);
+    final Color textPrimary = Colors.white;
+    final Color textSecondary = const Color(0xFF8B95A5);
+
     return Consumer<Taskprovider>(
       builder: (context, taskprovider, child) {
         final completedTasks = taskprovider.tasks
             .where((task) => task.isCompleted)
             .toList();
+
         if (completedTasks.isEmpty) {
-          return Center(child: Text("nsdkfn"));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.task_alt, size: 60, color: borderColor),
+                const SizedBox(height: 16),
+                Text(
+                  "No completed tasks yet",
+                  style: GoogleFonts.poppins(
+                    color: textSecondary,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          );
         }
+
         return ListView.builder(
+          padding: const EdgeInsets.only(
+            bottom: 80,
+          ), // Padding so FAB doesn't block last item
           itemCount: completedTasks.length,
           itemBuilder: (context, index) {
             final task = completedTasks[index];
@@ -32,54 +58,72 @@ class Completed extends StatelessWidget {
               ),
               onLongPress: () => confirmDelete(context, task.id),
               child: Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: cardColor,
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: borderColor, width: 1.2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Row(
                   children: [
-                    Transform.scale(
-                      scale: 1.2,
-                      child: Checkbox(
-                        value: task.isCompleted,
-                        onChanged: (_) {
-                          taskprovider.toggleTask(task);
-                          !task.isCompleted ? taskprovider.playAudio() : null;
-                        },
-                        checkColor: Colors.white,
-                        activeColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                    Checkbox(
+                      value: task.isCompleted,
+                      onChanged: (_) {
+                        taskprovider.toggleTask(task);
+                      },
+                      fillColor: WidgetStateProperty.resolveWith((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return primaryNeon;
+                        }
+                        return Colors.transparent;
+                      }),
+                      side: WidgetStateBorderSide.resolveWith((states) {
+                        return BorderSide(
+                          color: states.contains(WidgetState.selected)
+                              ? primaryNeon
+                              : textSecondary,
+                          width: 1.5,
+                        );
+                      }),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             task.title,
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               fontSize: 15,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
+                              // Dim the text slightly since it's a completed task
+                              color: task.isCompleted
+                                  ? textSecondary
+                                  : textPrimary,
                               decoration: task.isCompleted
                                   ? TextDecoration.lineThrough
                                   : null,
-                              color: task.isCompleted
-                                  ? Colors.grey
-                                  : Colors.black,
                             ),
                           ),
                           const SizedBox(height: 6),
                           Row(
                             children: [
-                              Image.asset("assets/calendar.png", scale: 25),
+                              Icon(
+                                Icons.calendar_today,
+                                size: 12,
+                                color: textSecondary,
+                              ),
                               const SizedBox(width: 5),
                               Text(
                                 task.date != null
@@ -87,19 +131,23 @@ class Completed extends StatelessWidget {
                                     : "No date",
                                 style: GoogleFonts.poppins(
                                   fontSize: 12,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w500,
+                                  color: textSecondary,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              const SizedBox(width: 5),
-                              Image.asset("assets/waste.png", scale: 25),
+                              const SizedBox(width: 12),
+                              Icon(
+                                Icons.access_time,
+                                size: 12,
+                                color: textSecondary,
+                              ),
                               const SizedBox(width: 5),
                               Text(
                                 task.time?.format(context) ?? "No time",
                                 style: GoogleFonts.poppins(
                                   fontSize: 12,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w500,
+                                  color: textSecondary,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ],
@@ -109,16 +157,21 @@ class Completed extends StatelessWidget {
                     ),
                     Consumer<Taskprovider>(
                       builder: (context, taskcolor, _) {
+                        final priorityColor = taskcolor.getPriorityColor(
+                          task.priority,
+                        );
                         return Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 5,
+                            horizontal: 10,
+                            vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: taskcolor
-                                .getPriorityColor(task.priority)
-                                .withValues(alpha: 0.15),
+                            color: priorityColor.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: priorityColor.withValues(alpha: 0.3),
+                              width: 1,
+                            ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -126,19 +179,15 @@ class Completed extends StatelessWidget {
                               Icon(
                                 taskcolor.getPriorityIcon(task.priority),
                                 size: 14,
-                                color: taskcolor.getPriorityColor(
-                                  task.priority,
-                                ),
+                                color: priorityColor,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 task.priority.toUpperCase(),
-                                style: TextStyle(
+                                style: GoogleFonts.poppins(
                                   fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: taskcolor.getPriorityColor(
-                                    task.priority,
-                                  ),
+                                  fontWeight: FontWeight.w600,
+                                  color: priorityColor,
                                 ),
                               ),
                             ],
