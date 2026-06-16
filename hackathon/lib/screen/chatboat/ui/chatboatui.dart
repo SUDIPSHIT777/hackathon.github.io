@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:hackathon/model/chatboatmodel.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
 import 'package:provider/provider.dart';
@@ -133,7 +134,7 @@ class ChatScreen extends StatelessWidget {
               : [],
         ),
         // --- NEW GPT MARKDOWN WIDGET ---
-        child: Text(
+        child: GptMarkdown(
           message.text,
           style: const TextStyle(
             color: Colors.white,
