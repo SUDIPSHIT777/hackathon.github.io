@@ -98,6 +98,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: const Color(0xFF162A3D),
                               width: 1.5,
                             ),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage("assets/codingImage.jpg.jpeg"),
+                            ),
                             boxShadow: [
                               BoxShadow(
                                 color: textAccent.withOpacity(0.12),
