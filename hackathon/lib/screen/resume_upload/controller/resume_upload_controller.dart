@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:doc_text_extractor/doc_text_extractor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:resume_xpert/features/auth/aiFeature/ai_feature.dart';
 import 'package:resume_xpert/features/auth/historyFeature/history_feature.dart';
