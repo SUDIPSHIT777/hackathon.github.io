@@ -35,7 +35,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNav(),
+      // home: BottomNav(),
+      home: ResumeAnalysisResultsScreen(),
     );
   }
 }
