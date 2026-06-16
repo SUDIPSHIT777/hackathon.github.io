@@ -41,6 +41,7 @@ dependencies:
   http: ^1.6.0
   auto_size_text: ^3.0.0
   shared_preferences: ^2.5.5
+  gpt_markdown: ^1.1.7
   
   firebase_core: ^4.5.0
   firebase_auth: ^6.2.0

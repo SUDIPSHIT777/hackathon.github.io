@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
+import 'package:hackathon/model/chatboatmodel.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +17,6 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Access the provider without listening to entire rebuilds here
     final provider = context.read<ChatProvider>();
 
     return Scaffold(
@@ -25,7 +26,7 @@ class ChatScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
         ),
         title: Row(
           children: [
@@ -40,8 +41,12 @@ class ChatScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Career Compass",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  "Career Coach",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 Text(
                   "Online",
@@ -61,7 +66,6 @@ class ChatScreen extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                // Use Consumer to rebuild only this ListView when messages change
                 child: Consumer<ChatProvider>(
                   builder: (context, chatProvider, child) {
                     return ListView.builder(
@@ -69,7 +73,8 @@ class ChatScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       itemCount: chatProvider.messages.length,
                       itemBuilder: (context, index) {
-                        final msg = chatProvider.messages[index];
+                        final ChatMessageModel msg =
+                            chatProvider.messages[index];
                         return _buildChatBubble(msg);
                       },
                     );
@@ -77,7 +82,7 @@ class ChatScreen extends StatelessWidget {
                 ),
               ),
 
-              // Loading Indicator for API request
+              // Loading Indicator
               Consumer<ChatProvider>(
                 builder: (context, chatProvider, child) {
                   return chatProvider.isLoading
@@ -98,14 +103,16 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildChatBubble(ChatMessage message) {
+  Widget _buildChatBubble(ChatMessageModel message) {
     bool isUser = message.isUser;
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        constraints: const BoxConstraints(maxWidth: 300),
+        constraints: const BoxConstraints(
+          maxWidth: 350,
+        ), // Increased slightly for code blocks
         decoration: BoxDecoration(
           color: isUser ? null : surfaceColor,
           gradient: isUser ? primaryGradient : null,
@@ -126,7 +133,8 @@ class ChatScreen extends StatelessWidget {
                 ]
               : [],
         ),
-        child: Text(
+        // --- NEW GPT MARKDOWN WIDGET ---
+        child: GptMarkdown(
           message.text,
           style: const TextStyle(
             color: Colors.white,
