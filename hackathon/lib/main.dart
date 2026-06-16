@@ -8,26 +8,16 @@ import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
 import 'package:hackathon/screen/explore_careers/degree_chooser/controller/DegreeChooserController.dart';
 import 'package:hackathon/screen/explore_careers/path_chooser/controller/path_chooser_controller.dart';
-import 'package:hackathon/screen/explore_careers/stream_chooser/controller/stream_chooser_controller.dart';
-import 'package:hackathon/screen/home/home_screen.dart';
-import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
-import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_screen.dart';
+
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
-import 'package:hackathon/test.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Load SharedPreferences
-  final prefs = await SharedPreferences.getInstance();
-  final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-
   // Load environment variables
   await dotenv.load(fileName: '.env');
   AppConfig.loadeApikey();
@@ -44,15 +34,13 @@ void main() async {
         ChangeNotifierProvider(create: (_) => DegreeChooserController()),
         ChangeNotifierProvider(create: (_) => CareerPathController()),
       ],
-      child: MyApp(isLoggedIn: isLoggedIn),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  final bool isLoggedIn;
-
-  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

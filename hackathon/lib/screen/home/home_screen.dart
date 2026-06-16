@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hackathon/screen/internship/ui/internship.dart';
 import 'package:hackathon/screen/resume_upload/resume_upload_screen.dart';
 import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_screen.dart';
+import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
+import 'package:hackathon/screen/tasks/model/taskmodel.dart';
+import 'package:hackathon/screen/tasks/ui/taskpageui.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,11 +22,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // Using LayoutBuilder to fetch parent constraints for responsiveness
     return Scaffold(
-      backgroundColor: Color(0xff051429),
+      backgroundColor: const Color(0xff051429),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color(0xff051429),
-        leading: CircleAvatar(
+        backgroundColor: const Color(0xff051429),
+        leading: const CircleAvatar(
           radius: 20,
           backgroundColor: Color(0xff051429),
           // Replace with your NetworkImage asset
@@ -95,7 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// MARK: - Progress Card
 class _ProgressCard extends StatelessWidget {
   const _ProgressCard();
 
@@ -108,110 +112,164 @@ class _ProgressCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Hi, Sarah 👋',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Ready to navigate your\ncareer path?',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white.withOpacity(0.7),
-              height: 1.3,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Row(
+      // Use StreamBuilder to get live updates for tasks
+      child: StreamBuilder<List<TaskModel>>(
+        stream: FirebaseAuth.instance.currentUser == null
+            ? const Stream.empty()
+            : context.read<Taskprovider>().getTasks(),
+        builder: (context, snapshot) {
+          double percent = 0.0;
+          int percentInt = 0;
+
+          // ====== FETCH USER NAME FROM FIREBASE ======
+          final user = FirebaseAuth.instance.currentUser;
+          // Get the display name, fallback to 'User' if null
+          final String fullName = user?.displayName ?? 'User';
+          // Split by space to just get the first name
+          final String firstName = fullName.split(' ').first;
+
+          // Calculate daily progress
+          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            final tasks = snapshot.data!;
+            final now = DateTime.now();
+
+            bool isToday(DateTime date) {
+              return date.year == now.year &&
+                  date.month == now.month &&
+                  date.day == now.day;
+            }
+
+            final todayTasks = tasks.where((task) {
+              return isToday(task.date ?? task.createdAt);
+            }).toList();
+
+            final total = todayTasks.length;
+            final completed = todayTasks.where((t) => t.isCompleted).length;
+
+            if (total > 0) {
+              percent = completed / total;
+              percentInt = (percent * 100).toInt();
+            }
+          }
+
+          final progressColor = context.read<Taskprovider>().percentagecolor(
+            percent,
+          );
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Circular Progress Indicator
-              Stack(
-                alignment: Alignment.center,
+              Text(
+                // ====== USE THE EXTRACTED FIRST NAME ======
+                'Hi, $firstName 👋',
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Ready to navigate your\ncareer path?',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.7),
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
                 children: [
-                  SizedBox(
-                    width: 85,
-                    height: 85,
-                    child: CircularProgressIndicator(
-                      value: 0.72,
-                      strokeWidth: 8,
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        Color(0xFF00E5BC),
+                  // Circular Progress Indicator
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        width: 85,
+                        height: 85,
+                        child: CircularProgressIndicator(
+                          value: percent,
+                          strokeWidth: 8,
+                          backgroundColor: Colors.white.withOpacity(0.1),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            progressColor,
+                          ),
+                        ),
                       ),
+                      Text(
+                        '$percentInt%',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: percentInt > 0 ? progressColor : Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 20),
+                  // Progress Info Text
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Your Progress',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          percent >= 1.0
+                              ? "Awesome! All tasks completed."
+                              : "Keep going! You're doing great.",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        InkWell(
+                          onTap: () {
+                            Get.to(
+                              () => const Taskpageui(),
+                              transition: Transition.rightToLeft,
+                            );
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Text(
+                                'View Details ',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward,
+                                size: 14,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const Text(
-                    '72%',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white24,
+                    size: 16,
                   ),
                 ],
               ),
-              const SizedBox(width: 20),
-              // Progress Info Text
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Your Progress',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "Keep going! You're doing great.",
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white.withOpacity(0.6),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    InkWell(
-                      onTap: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Text(
-                            'View Details ',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_forward,
-                            size: 14,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white24,
-                size: 16,
-              ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -227,19 +285,19 @@ class _QuickAccessGrid extends StatelessWidget {
     // Dynamic item styling parameters
     final List<VoidCallback> fun = [
       () => Get.to(
-        () => ResumeUploadScreen(),
+        () => const ResumeUploadScreen(),
         transition: Transition.rightToLeft,
       ), // resume analysis
       () => Get.to(
-        () => ResumeUploadScreen(),
+        () => const Taskpageui(),
         transition: Transition.rightToLeft,
       ), // skill gap assment
       () => Get.to(
-        () => ChooseStreamScreen(),
+        () => const ChooseStreamScreen(),
         transition: Transition.rightToLeft,
       ), // explore careers
       () => Get.to(
-        () => ResumeUploadScreen(),
+        () => const InternshipDashboard(),
         transition: Transition.rightToLeft,
       ), // intership finder
     ];
@@ -259,11 +317,7 @@ class _QuickAccessGrid extends StatelessWidget {
         Icons.explore_outlined,
         const Color(0xFF2196F3),
       ),
-      _GridItemData(
-        'Internship\nFinder',
-        Icons.business_center_outlined,
-        const Color(0xFF9C27B0),
-      ),
+      _GridItemData('Internship\nFinder', Icons.work, const Color(0xFF2196F3)),
     ];
 
     return GridView.builder(

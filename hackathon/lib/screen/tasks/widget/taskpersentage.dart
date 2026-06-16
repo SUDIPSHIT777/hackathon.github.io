@@ -10,68 +10,89 @@ class Taskpersentage {
     required int total,
     required double percent,
   }) {
+    // Dark Theme Colors Based on Design
+    final Color cardColor = const Color(0xFF131826);
+    final Color borderColor = const Color(0xFF262D47);
+    final Color textPrimary = Colors.white;
+    final Color textSecondary = const Color(0xFF8B95A5);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       decoration: BoxDecoration(
+        color: cardColor,
         borderRadius: BorderRadius.circular(18),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xff1E3A8A), Color(0xff4F46E5), Color(0xff8B5CF6)],
-        ),
+        border: Border.all(color: borderColor, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Daily Progress",
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Daily Progress",
+                  style: GoogleFonts.poppins(
+                    color: textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 6),
-              Text(
-                "$completed of $total tasks completed\nDo all Task it's mandatory",
-                style: GoogleFonts.poppins(
-                  color: Colors.white.withValues(alpha: .9),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+                const SizedBox(height: 8),
+                Text(
+                  "$completed of $total Goals completed\nDo all Goals, it's mandatory",
+                  style: GoogleFonts.poppins(
+                    color: textSecondary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    height: 1.4,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+              ],
+            ),
           ),
           Consumer<Taskprovider>(
             builder: (context, taskprovider, child) {
               final color = taskprovider.percentagecolor(percent);
 
-              return CircularPercentIndicator(
-                radius: 42,
-                lineWidth: 7,
-                percent: percent,
-                animation: true,
-                circularStrokeCap: CircularStrokeCap.round,
-                backgroundColor: Colors.white.withValues(alpha: .25),
-                progressColor: color,
-                center: Text(
-                  "${(percent * 100).toInt()}%",
-                  style: GoogleFonts.poppins(
-                    color: color,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+              return Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    // Adds a glowing effect matching the progress color
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.25),
+                      blurRadius: 16,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: CircularPercentIndicator(
+                  radius: 42,
+                  lineWidth: 8,
+                  percent: percent,
+                  animation: true,
+                  circularStrokeCap: CircularStrokeCap.round,
+                  backgroundColor: borderColor, // Darker background track
+                  progressColor: color,
+                  center: Text(
+                    "${(percent * 100).toInt()}%",
+                    style: GoogleFonts.poppins(
+                      color:
+                          color, // Text color matches the glowing progress color
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               );
