@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/model/taskmodel.dart';
 import 'package:hackathon/screen/tasks/ui/taskaddui.dart';
+import 'package:hackathon/screen/tasks/ui/taskdetails.dart';
 import 'package:hackathon/screen/tasks/widget/completed.dart';
 import 'package:hackathon/screen/tasks/widget/snackbardesign.dart';
 import 'package:hackathon/screen/tasks/widget/taskpersentage.dart';
@@ -91,8 +92,8 @@ class _TaskpageuiState extends State<Taskpageui>
                     _snackbarShown = true;
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       Snackbardesign.showCustomSnackbar(
-                        title: "Task Completed",
-                        subtitle: "Congratulations You completed your task",
+                        title: "Goal Completed",
+                        subtitle: "Congratulations You completed your Goal",
                         backgroundColor: const Color(0xFF00c247),
                         icon: Icons.download_done_rounded,
                       );
@@ -195,7 +196,7 @@ class _TaskpageuiState extends State<Taskpageui>
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  "No tasks pending",
+                                  "No Goal pending",
                                   style: GoogleFonts.poppins(
                                     color: textSecondary,
                                     fontSize: 16,
@@ -243,7 +244,13 @@ class _TaskpageuiState extends State<Taskpageui>
                                     final task = dateTasks[index];
 
                                     return GestureDetector(
-                                      onTap: () {},
+                                      onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              Taskdetails(alltaskdetails: task),
+                                        ),
+                                      ),
                                       child: Container(
                                         margin: const EdgeInsets.only(
                                           bottom: 12,

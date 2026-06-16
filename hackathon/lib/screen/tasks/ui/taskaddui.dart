@@ -66,7 +66,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  "Task Title",
+                  "Goal Title",
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -240,7 +240,7 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
                       }
                     },
                     child: Text(
-                      "Create Task",
+                      "Create Goal",
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
