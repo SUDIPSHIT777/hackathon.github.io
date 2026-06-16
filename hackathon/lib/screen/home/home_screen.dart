@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
           radius: 20,
           backgroundColor: Color(0xff051429),
           // Replace with your NetworkImage asset
-          backgroundImage: AssetImage('assets/appLogo.png'),
+          backgroundImage: AssetImage('assets/appLogoOnly.png'),
         ),
         title: Text(
           "CAREER COMPASS",

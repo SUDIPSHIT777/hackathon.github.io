@@ -12,8 +12,6 @@ class ResumeUploadScreen extends StatefulWidget {
 }
 
 class _ResumeUploadScreenState extends State<ResumeUploadScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,14 +84,14 @@ class _ResumeUploadScreenState extends State<ResumeUploadScreen> {
                                 children: [
                                   Positioned(
                                     child: Lottie.asset(
-                                      'assets/animations/Search.json',
+                                      'assets/animation/Search.json',
                                     ),
                                   ),
                                   Positioned(
                                     right: 0,
                                     child: Lottie.asset(
                                       width: 80,
-                                      'assets/animations/Sparkles Loop Loader ai.json',
+                                      'assets/animation/Sparkles Loop Loader ai.json',
                                     ),
                                   ),
                                 ],
@@ -104,7 +102,9 @@ class _ResumeUploadScreenState extends State<ResumeUploadScreen> {
                             //----------------------- btn
                             GestureDetector(
                               onTap: () {
-                                context.read<ResumeUploadController>().pickFile();
+                                context
+                                    .read<ResumeUploadController>()
+                                    .pickFile();
                               },
                               child: Container(
                                 width: 200,
