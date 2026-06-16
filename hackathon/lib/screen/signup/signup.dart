@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -173,8 +175,51 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ],
                     ),
                     child: ElevatedButton(
-                      onPressed: () {
-                        // TODO: Implement Firebase Auth logic here
+                      onPressed: () async {
+                        final name = _nameController.text.trim();
+                        final email = _emailController.text.trim();
+                        final password = _passwordController.text.trim();
+                        final confirmPassword = _confirmPasswordController.text
+                            .trim();
+
+                        // 1. Basic Validation
+                        if (name.isEmpty ||
+                            email.isEmpty ||
+                            password.isEmpty ||
+                            confirmPassword.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please fill all fields'),
+                              backgroundColor: Colors.redAccent,
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (password != confirmPassword) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Passwords do not match'),
+                              backgroundColor: Colors.redAccent,
+                            ),
+                          );
+                          return;
+                        }
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('isLoggedIn', true);
+
+                        // Optional: You could also save the user's name or email here
+                        // await prefs.setString('userName', name);
+
+                        // 3. Check context before navigating
+                        if (!context.mounted) return;
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BottomNav(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,

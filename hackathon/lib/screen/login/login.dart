@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,6 +11,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordObscured = true;
+  bool _isLoading = false; // Add this state variable to track loading
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -98,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: const Color(0xFF162A3D),
                               width: 1.5,
                             ),
-                            image: DecorationImage(
+                            image: const DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage("assets/codingImage.jpg.jpeg"),
                             ),
@@ -175,7 +178,49 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          // Disable button if loading
+                          onPressed: _isLoading
+                              ? null
+                              : () async {
+                                  final email = _emailController.text.trim();
+                                  final password = _passwordController.text
+                                      .trim();
+
+                                  if (email.isNotEmpty && password.isNotEmpty) {
+                                    // 1. Set loading state to true
+                                    setState(() {
+                                      _isLoading = true;
+                                    });
+
+                                    // 2. Simulate 2-second delay (API call simulation)
+                                    await Future.delayed(
+                                      const Duration(seconds: 2),
+                                    );
+
+                                    // 3. Save SharedPreferences
+                                    final prefs =
+                                        await SharedPreferences.getInstance();
+                                    await prefs.setBool('isLoggedIn', true);
+                                    if (!context.mounted) return;
+
+                                    // 4. Navigate
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const BottomNav(),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Please enter both Email and Password',
+                                        ),
+                                        backgroundColor: Colors.redAccent,
+                                      ),
+                                    );
+                                  }
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,
@@ -183,14 +228,24 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              color: backgroundColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          // Conditionally show loader or text
+                          child: _isLoading
+                              ? const SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    color: backgroundColor,
+                                    strokeWidth: 2.5,
+                                  ),
+                                )
+                              : const Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    color: backgroundColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -223,75 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                       const SizedBox(height: 24),
-
-                      // Social Buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // 1. Google Asset Emblem
-                          _buildSocialButton(
-                            logoWidget: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/google.png',
-                                  width:
-                                      24, // Optimized sizing for clean alignment
-                                  height: 24,
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    // Fallback text/icon if image asset is missing during development
-                                    return const Text(
-                                      "G",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          // 2. Microsoft Native Logo (Fixed GridView shrinkWrap)
-                          _buildSocialButton(
-                            logoWidget: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: GridView.count(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 2,
-                                crossAxisSpacing: 2,
-                                shrinkWrap:
-                                    true, // Prevents layout calculation errors
-                                physics: const NeverScrollableScrollPhysics(),
-                                children: [
-                                  Container(color: const Color(0xFFF25022)),
-                                  Container(color: const Color(0xFF7FBA00)),
-                                  Container(color: const Color(0xFF00A4EF)),
-                                  Container(color: const Color(0xFFFFB900)),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          // 3. Education/University Cap Logo
-                          _buildSocialButton(
-                            logoWidget: const Icon(
-                              Icons.school_rounded,
-                              color: textAccent,
-                              size: 26,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      // FIX: Replaced Spacer() with Expanded(child: SizedBox.shrink())
-                      // or alternatively an empty padding layout block to safely push components down.
                       const Expanded(child: SizedBox(height: 24)),
-
-                      // Bottom Sign Up Switcher Row
                       Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: Row(
@@ -374,25 +361,6 @@ class _LoginScreenState extends State<LoginScreen> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: textAccent, width: 1.5),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialButton({required Widget logoWidget}) {
-    return Expanded(
-      child: Container(
-        height: 52,
-        margin: const EdgeInsets.symmetric(horizontal: 6),
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFF162A3D), width: 1),
-        ),
-        child: InkWell(
-          onTap: () {},
-          borderRadius: BorderRadius.circular(12),
-          child: Center(child: logoWidget),
         ),
       ),
     );
