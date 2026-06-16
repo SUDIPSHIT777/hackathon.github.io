@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:hackathon/config/app_config.dart';
 import 'package:hackathon/firebase_options.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
@@ -23,33 +25,17 @@ void main() async {
 
   // Load environment variables
   await dotenv.load(fileName: '.env');
-
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
+  AppConfig.loadeApikey();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => ResumeUploadController(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ResumeResultController(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => DateTimeProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => Taskprovider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => Userprovider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ChatProvider(),
-        ),
+        ChangeNotifierProvider(create: (context) => ResumeUploadController()),
+        ChangeNotifierProvider(create: (context) => ResumeResultController()),
+        ChangeNotifierProvider(create: (context) => DateTimeProvider()),
+        ChangeNotifierProvider(create: (context) => Taskprovider()),
+        ChangeNotifierProvider(create: (context) => Userprovider()),
+        ChangeNotifierProvider(create: (context) => ChatProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),
@@ -66,15 +52,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Hackathon App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: isLoggedIn
-          ? const BottomNav()
-          : const LoginScreen(),
+      home: BottomNav(),
+      // home: ResumeAnalysisResultsScreen(page: '',),
     );
   }
 }

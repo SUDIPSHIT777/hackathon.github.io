@@ -2,10 +2,15 @@ import 'dart:developer';
 import 'package:doc_text_extractor/doc_text_extractor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hackathon/auth/ai_feature.dart';
+import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
+import 'package:hackathon/screen/loading_screen.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
+import 'package:hackathon/screen/resume_result/resume_result_screen.dart';
 import 'package:hackathon/widgets/custom_Snackbar.dart';
 import 'package:provider/provider.dart';
+
 class ResumeUploadController extends ChangeNotifier {
   String fileName = "";
   String pdfPath = "";
@@ -70,14 +75,13 @@ class ResumeUploadController extends ChangeNotifier {
       );
       return;
     }
-    // router.go('/analyzing');
+    Get.off(() => LoadingScreen());
     final data = await AiFeature.openRouterAI(pdfText);
     if (data != null) {
       resultController.respons = data;
-      // HistoryFeature.storeInHistory(data);
-      // router.goNamed('result', pathParameters: {'id': 'home'});
+      Get.to(ResumeResultScreen(page: "page"));
     } else {
-      // router.go('/home');
+      Get.offAll(() => BottomNav());
       customSnackbar(
         context: context,
         message:
@@ -127,16 +131,16 @@ class ResumeUploadController extends ChangeNotifier {
     for (final word in keywords) {
       if (lower.contains(word)) score++;
     }
-    log("score $score");
+    // log("score $score");
     return score >= 3;
   }
 
   bool validateResume(String text) {
-    log(
-      (text.length > 100).toString() +
-          isResumeText(text).toString() +
-          hasResumeSignals(text).toString(),
-    );
+    // log(
+    //   (text.length > 100).toString() +
+    //       isResumeText(text).toString() +
+    //       hasResumeSignals(text).toString(),
+    // );
     return text.length > 100 && isResumeText(text) && hasResumeSignals(text);
   }
 }
