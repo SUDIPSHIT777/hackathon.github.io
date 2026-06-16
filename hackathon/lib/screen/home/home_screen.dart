@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,115 +14,79 @@ class _HomeScreenState extends State<HomeScreen> {
     // Using LayoutBuilder to fetch parent constraints for responsiveness
     return Scaffold(
       backgroundColor: Color(0xff051429),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            bool isTablet = constraints.maxWidth > 600;
-            double horizontalPadding = isTablet ? 32.0 : 16.0;
-
-            return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: 16.0,
-              ),
-              child: Center(
-                child: Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 800,
-                  ), // Centers & limits width on large screens
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 1. Top Custom App Bar
-                      const _HeaderSection(),
-                      const SizedBox(height: 24),
-
-                      // 2. Progress Card
-                      const _ProgressCard(),
-                      const SizedBox(height: 28),
-
-                      // 3. Quick Access Grid Section
-                      const Text(
-                        'Quick Access',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      _QuickAccessGrid(isTablet: isTablet),
-                      const SizedBox(height: 28),
-
-                      // 4. Continue Learning Section
-                      const Text(
-                        'Continue Learning',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      const _ContinueLearningCard(),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Color(0xff051429),
+        leading: CircleAvatar(
+          radius: 20,
+          backgroundColor: Color(0xff051429),
+          // Replace with your NetworkImage asset
+          backgroundImage: AssetImage('assets/appLogo.png'),
+        ),
+        title: Text(
+          "CAREER COMPASS",
+          style: GoogleFonts.orbitron(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+            fontSize: 18,
+          ),
         ),
       ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isTablet = constraints.maxWidth > 600;
+          double horizontalPadding = isTablet ? 32.0 : 16.0;
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding,
+              vertical: 16.0,
+            ),
+            child: Center(
+              child: Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 800,
+                ), // Centers & limits width on large screens
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 2. Progress Card
+                    const _ProgressCard(),
+                    const SizedBox(height: 28),
+
+                    // 3. Quick Access Grid Section
+                    const Text(
+                      'Quick Access',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _QuickAccessGrid(isTablet: isTablet),
+                    const SizedBox(height: 28),
+
+                    // 4. Continue Learning Section
+                    const Text(
+                      'Continue Learning',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const _ContinueLearningCard(),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
       // 5. Bottom Navigation Bar
-      bottomNavigationBar: const _BottomNavBar(),
-    );
-  }
-}
-
-// MARK: - Header Section
-class _HeaderSection extends StatelessWidget {
-  const _HeaderSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white, size: 28),
-          onPressed: () {},
-        ),
-        Row(
-          children: [
-            IconButton(
-              icon: const Icon(
-                Icons.notifications_none,
-                color: Colors.white,
-                size: 28,
-              ),
-              onPressed: () {},
-            ),
-            const SizedBox(width: 12),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: const Color(0xFF00E5BC).withOpacity(0.5),
-                  width: 2,
-                ),
-              ),
-              child: const CircleAvatar(
-                radius: 22,
-                backgroundColor: Colors.grey,
-                // Replace with your NetworkImage asset
-                backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120',
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
