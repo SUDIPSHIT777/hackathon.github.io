@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -12,6 +13,13 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    final userName = user?.displayName?.isNotEmpty == true
+        ? user!.displayName!
+        : "User";
+
+    final userEmail = user?.email ?? "No Email";
     const Color backgroundColor = Color(0xff051429);
     const Color cardBackgroundColor = Color.fromARGB(255, 19, 38, 60);
 
@@ -98,8 +106,8 @@ class ProfileScreen extends StatelessWidget {
                             const SizedBox(height: 16),
 
                             // --- USER META DATA DESCRIPTION NAMES ---
-                            const Text(
-                              'Sarah Ahmed',
+                            Text(
+                              userName,
                               style: TextStyle(
                                 color: textWhiteColor,
                                 fontSize: 20,
@@ -107,25 +115,26 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 6),
-                            const Text(
-                              'Computer Science Student',
+                            Text(
+                              userEmail,
                               style: TextStyle(
                                 color: textMutedColor,
                                 fontSize: 14,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'Tech University',
-                              style: TextStyle(
-                                color: textMutedColor,
-                                fontSize: 13,
-                              ),
-                            ),
-                            const SizedBox(height: 28),
 
-                            // --- STATS METRIC GRID SYSTEM ---
-                            const SizedBox(height: 24),
+                            // const SizedBox(height: 4),
+                            // // const Text(
+                            // //   'Tech University',
+                            // //   style: TextStyle(
+                            // //     color: textMutedColor,
+                            // //     fontSize: 13,
+                            // //   ),
+                            // // ),
+                            // // const SizedBox(height: 28),
+
+                            // // --- STATS METRIC GRID SYSTEM ---
+                            // const SizedBox(height: 24),
 
                             // --- DASHBOARD ACTIONS MENU LIST ---
                             _buildMenuRow(
