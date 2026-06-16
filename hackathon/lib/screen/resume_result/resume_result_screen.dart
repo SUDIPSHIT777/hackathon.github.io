@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:hackathon/model/aiRespons_model.dart';
+import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -22,14 +26,14 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
   late Animation<double> _scoreAnim;
 
   // ── Color palette ──────────────────────────────────────────────────────────
-  static const Color colorBg = Color(0xFF060E1A);
-  static const Color colorCardBg = Color(0xFF0C1929);
+  static const Color colorBg = Color(0xff051429);
+  static const Color colorCardBg = Color.fromARGB(255, 19, 38, 60);
   static const Color colorTextWhite = Colors.white;
   static const Color colorTextMuted = Color(0xFF7D8E9F);
   static const Color colorMint = Color(0xFF00D2A0);
   static const Color colorRedAccent = Color(0xFFEF4444);
   static const Color colorBlueAccent = Color(0xFF3B82F6);
-  static const Color colorTabBg = Color(0xFF0D1724);
+  // static const Color colorTabBg = Color(0xFF0D1724);
   static const Color colorTabActiveBg = Color(0xFF1E2D4A);
 
   @override
@@ -77,9 +81,8 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
             elevation: 0,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: colorTextWhite),
-              onPressed: () => widget.page == 'home'
-                  ? null // replace with context.go('/home') if using go_router
-                  : Navigator.of(context).pop(),
+              onPressed: () =>
+                  Get.offAll(() => BottomNav(), transition: Transition.fade),
             ),
             title: const Text(
               'Resume Analysis',
@@ -90,38 +93,6 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
               ),
             ),
             centerTitle: true,
-            actions: [
-              Container(
-                margin: const EdgeInsets.only(right: 16),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: colorTabBg,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.dark_mode_outlined,
-                      size: 16,
-                      color: colorTextMuted,
-                    ),
-                    const SizedBox(width: 4),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF3B5CF6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.light_mode,
-                        size: 14,
-                        color: colorTextWhite,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
           body: SafeArea(
             child: LayoutBuilder(
@@ -134,31 +105,31 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
                     constraints: const BoxConstraints(maxWidth: 600),
                     child: Column(
                       children: [
-                        // ── Tab bar ──────────────────────────────────────────
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: hPad,
-                            vertical: 8,
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: colorTabBg,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  _buildSubTab(0, 'Overview'),
-                                  _buildSubTab(1, 'Detailed Result'),
-                                  _buildSubTab(2, 'Step-by-Step'),
-                                  _buildSubTab(3, 'Summary'),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        // // ── Tab bar ──────────────────────────────────────────
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(
+                        //     horizontal: hPad,
+                        //     vertical: 8,
+                        //   ),
+                        //   child: Container(
+                        //     padding: const EdgeInsets.all(4),
+                        //     decoration: BoxDecoration(
+                        //       color: colorTabBg,
+                        //       borderRadius: BorderRadius.circular(12),
+                        //     ),
+                        //     child: SingleChildScrollView(
+                        //       scrollDirection: Axis.horizontal,
+                        //       child: Row(
+                        //         children: [
+                        //           _buildSubTab(0, 'Overview'),
+                        //           _buildSubTab(1, 'Detailed Result'),
+                        //           _buildSubTab(2, 'Step-by-Step'),
+                        //           _buildSubTab(3, 'Summary'),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
 
                         // ── Scrollable body ──────────────────────────────────
                         Expanded(
@@ -278,9 +249,6 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
                             ),
                           ),
                         ),
-
-                        // ── Sticky footer ────────────────────────────────────
-                        _buildStickyFooterBar(),
                       ],
                     ),
                   ),
@@ -737,78 +705,6 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
               color: colorTextMuted,
               fontSize: 13,
               height: 1.4,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── Sticky footer ─────────────────────────────────────────────────────────────
-  Widget _buildStickyFooterBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: const BoxDecoration(
-        color: colorBg,
-        border: Border(top: BorderSide(color: Color(0xFF101B2B), width: 1)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 50,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              gradient: const LinearGradient(
-                colors: [Color(0xFF4D6FFF), Color(0xFF8B5CF6)],
-              ),
-            ),
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              onPressed: () {},
-              icon: const Icon(
-                Icons.upload_outlined,
-                color: colorTextWhite,
-                size: 20,
-              ),
-              label: const Text(
-                'Upload New Resume',
-                style: TextStyle(
-                  color: colorTextWhite,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 14),
-          GestureDetector(
-            onTap: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(
-                  Icons.description_outlined,
-                  color: Color(0xFF5A75A5),
-                  size: 16,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'View Previous Analyses',
-                  style: TextStyle(
-                    color: Color(0xFF5A75A5),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
             ),
           ),
         ],
