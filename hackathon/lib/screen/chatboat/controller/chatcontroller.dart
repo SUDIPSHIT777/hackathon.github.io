@@ -19,12 +19,7 @@ class ChatProvider extends ChangeNotifier {
 
     final userMessage = textController.text.trim();
 
-    _messages.add(
-      ChatMessageModel(
-        text: userMessage,
-        isUser: true,
-      ),
-    );
+    _messages.add(ChatMessageModel(text: userMessage, isUser: true));
 
     textController.clear();
     notifyListeners();
@@ -47,10 +42,29 @@ class ChatProvider extends ChangeNotifier {
           "model": "deepseek/deepseek-chat",
           "messages": [
             {
-              "role": "user",
-              "content": message,
-            }
-          ]
+              "role": "system",
+              "content": """
+You are Career Compass AI, an expert Career Advisor.
+
+Your responsibilities:
+- Help students choose careers, streams, degrees, and skills.
+- Suggest learning paths and career roadmaps.
+- Recommend courses, certifications, and technologies.
+- Explain career opportunities, salaries, and future scope.
+- Provide clear, encouraging, and practical advice.
+- Answer in simple language suitable for students.
+
+Rules:
+- Be concise but informative.
+- Use bullet points when helpful.
+- If asked unrelated questions, politely redirect toward education, careers, skills, jobs, and professional growth.
+- Never mention you are an AI model.
+""",
+            },
+            {"role": "user", "content": message},
+          ],
+          "temperature": 0.7,
+          "max_tokens": 700,
         }),
       );
 
@@ -60,12 +74,7 @@ class ChatProvider extends ChangeNotifier {
         final aiReply =
             data["choices"][0]["message"]["content"] ?? "No response";
 
-        _messages.add(
-          ChatMessageModel(
-            text: aiReply,
-            isUser: false,
-          ),
-        );
+        _messages.add(ChatMessageModel(text: aiReply, isUser: false));
       } else {
         _messages.add(
           ChatMessageModel(
@@ -75,12 +84,7 @@ class ChatProvider extends ChangeNotifier {
         );
       }
     } catch (e) {
-      _messages.add(
-        ChatMessageModel(
-          text: "Error: $e",
-          isUser: false,
-        ),
-      );
+      _messages.add(ChatMessageModel(text: "Error: $e", isUser: false));
     }
 
     _isLoading = false;
