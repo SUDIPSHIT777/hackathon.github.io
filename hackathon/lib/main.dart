@@ -10,6 +10,7 @@ import 'package:hackathon/screen/home/home_screen.dart';
 import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
+import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_screen.dart';
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
@@ -45,17 +46,23 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
 
-  const MyApp({
-    super.key,
-    required this.isLoggedIn,
-  });
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Career Compass',
+      // Define a unified dark theme
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xff051429), // Your deep dark blue
+        canvasColor: const Color(0xff051429), // For sheets, drawers, dropdowns
+        colorScheme: const ColorScheme.dark().copyWith(
+          surface: const Color(0xff051429), // For fallback surface blends
+        ),
+      ),
       home: BottomNav(),
-      // home: ResumeAnalysisResultsScreen(page: '',),
+      // home: const ChooseStreamScreen(),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/screen/resume_upload/resume_upload_screen.dart';
+import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -225,10 +226,22 @@ class _QuickAccessGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Dynamic item styling parameters
     final List<VoidCallback> fun = [
-      () => Get.to(() => ResumeUploadScreen()),
-      () => Get.to(() => ResumeUploadScreen()),
-      () => Get.to(() => ResumeUploadScreen()),
-      () => Get.to(() => ResumeUploadScreen()),
+      () => Get.to(
+        () => ResumeUploadScreen(),
+        transition: Transition.rightToLeft,
+      ), // resume analysis
+      () => Get.to(
+        () => ResumeUploadScreen(),
+        transition: Transition.rightToLeft,
+      ), // skill gap assment
+      () => Get.to(
+        () => ChooseStreamScreen(),
+        transition: Transition.rightToLeft,
+      ), // explore careers
+      () => Get.to(
+        () => ResumeUploadScreen(),
+        transition: Transition.rightToLeft,
+      ), // intership finder
     ];
     final items = [
       _GridItemData(
