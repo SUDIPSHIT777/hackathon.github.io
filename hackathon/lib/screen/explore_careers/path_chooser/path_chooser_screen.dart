@@ -87,22 +87,22 @@ class _PathChooserScreenState extends State<PathChooserScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 // --- TOP PROGRESS STEPPER (ALL STEPS COMPLETED) ---
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'Step 4 of 4',
-                                      style: TextStyle(
-                                        color: colorTextMuted,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    _buildCompletedStepper(),
-                                  ],
-                                ),
-                                const SizedBox(height: 28),
+                                // Row(
+                                //   mainAxisAlignment:
+                                //       MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     const Text(
+                                //       'Step 4 of 4',
+                                //       style: TextStyle(
+                                //         color: colorTextMuted,
+                                //         fontSize: 13,
+                                //         fontWeight: FontWeight.w500,
+                                //       ),
+                                //     ),
+                                //     _buildCompletedStepper(),
+                                //   ],
+                                // ),
+                                // const SizedBox(height: 28),
 
                                 // --- SUCCESS RADIAL VECTOR SHIELD ---
                                 Center(
@@ -325,9 +325,6 @@ class _PathChooserScreenState extends State<PathChooserScreen> {
                             ),
                           ),
                         ),
-
-                        // --- ACTIONS FOOTER LAYER ACTION BUTTONS ---
-                        _buildFooterActions(colorTextWhite, colorTextMuted),
                       ],
                     ),
                   ),
@@ -586,78 +583,4 @@ class _PathChooserScreenState extends State<PathChooserScreen> {
   }
 
   // Footer Button row architecture configuration
-  Widget _buildFooterActions(Color textWhite, Color textMuted) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        children: [
-          Container(
-            height: 50,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              gradient: const LinearGradient(
-                colors: [Color(0xFF007BFF), Color(0xFF0052D4)],
-              ),
-            ),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              onPressed: () {},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'View Detailed Roadmap',
-                    style: TextStyle(
-                      color: textWhite,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Icon(Icons.arrow_forward, color: textWhite, size: 16),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.download_outlined, color: textMuted, size: 18),
-                label: Text(
-                  'Download Report',
-                  style: TextStyle(
-                    color: textMuted,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              TextButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.grid_view_rounded, color: textMuted, size: 16),
-                label: Text(
-                  'Go to Dashboard',
-                  style: TextStyle(
-                    color: textMuted,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }
