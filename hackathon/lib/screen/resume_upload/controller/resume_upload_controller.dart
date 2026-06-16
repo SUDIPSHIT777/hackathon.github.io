@@ -3,7 +3,7 @@ import 'package:doc_text_extractor/doc_text_extractor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hackathon/auth/ai_feature.dart';
+import 'package:hackathon/auth/resume_AI.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/loading_screen.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';

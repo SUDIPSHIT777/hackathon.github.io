@@ -1,668 +1,381 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hackathon/model/aiRespons_model.dart';
-import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
-import 'package:provider/provider.dart';
 
-class ResumeAnalysisResultsScreen extends StatefulWidget {
-  final String page;
-  const ResumeAnalysisResultsScreen({super.key, required this.page});
-
-  @override
-  State<ResumeAnalysisResultsScreen> createState() =>
-      _ResumeAnalysisResultsScreenState();
-}
-
-class _ResumeAnalysisResultsScreenState
-    extends State<ResumeAnalysisResultsScreen>
-    with SingleTickerProviderStateMixin {
-  int _activeTabIdx = 0;
-
-  // Animated score value
-  late AnimationController _scoreAnimController;
-  late Animation<double> _scoreAnim;
-
-  // ── Color palette ──────────────────────────────────────────────────────────
-  static const Color colorBg = Color(0xFF060E1A);
-  static const Color colorCardBg = Color(0xFF0C1929);
-  static const Color colorTextWhite = Colors.white;
-  static const Color colorTextMuted = Color(0xFF7D8E9F);
-  static const Color colorMint = Color(0xFF00D2A0);
-  static const Color colorRedAccent = Color(0xFFEF4444);
-  static const Color colorBlueAccent = Color(0xFF3B82F6);
-  static const Color colorTabBg = Color(0xFF0D1724);
-  static const Color colorTabActiveBg = Color(0xFF1E2D4A);
-
-  @override
-  void initState() {
-    super.initState();
-    _scoreAnimController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    _scoreAnim = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _scoreAnimController, curve: Curves.easeOut),
-    );
-    // Kick off animation after first frame so controller data is ready
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scoreAnimController.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _scoreAnimController.dispose();
-    super.dispose();
-  }
-
-  // ── Score → accent colour (mirrors Screen 2 logic) ────────────────────────
-  Color _scoreColor(int score) {
-    if (score < 50) return colorRedAccent;
-    if (score < 80) return Colors.orange;
-    return colorMint;
-  }
+class CareerPathReadyScreen extends StatelessWidget {
+  const CareerPathReadyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ResumeResultController>(
-      builder: (context, controller, _) {
-        final resume = controller.respons;
-        final int score = resume.score;
-        final double scorePercent = (score / 100).clamp(0.0, 1.0);
-        final Color accentColor = _scoreColor(score);
+    // Exact color codes sampled from Step 4 of WhatsApp Image 2026-06-16 at 12.35.48 PM.jpeg
+    const Color colorBg = Color(0xFF040B14);
+    const Color colorCardBg = Color(0xFF0A1424);
+    const Color colorTextWhite = Colors.white;
+    const Color colorTextMuted = Color(0xFF6B7A90);
+    const Color colorMint = Color(0xFF00D2A0);
+    const Color colorBlue = Color(0xFF3B82F6);
+    const Color colorBorderDefault = Color(0xFF13233A);
 
-        return Scaffold(
-          backgroundColor: colorBg,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: colorTextWhite),
-              onPressed: () =>
-                  widget.page == 'home'
-                      ? null // replace with context.go('/home') if using go_router
-                      : Navigator.of(context).pop(),
-            ),
-            title: const Text(
-              'Resume Analysis',
-              style: TextStyle(
-                color: colorTextWhite,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            centerTitle: true,
-            actions: [
-              Container(
-                margin: const EdgeInsets.only(right: 16),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: colorTabBg,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
+    return Scaffold(
+      backgroundColor: colorBg,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: colorTextWhite),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final bool isWideScreen = constraints.maxWidth > 650;
+            final double horizontalPadding = isWideScreen ? 48.0 : 20.0;
+
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 700),
+                child: Column(
                   children: [
-                    const Icon(
-                      Icons.dark_mode_outlined,
-                      size: 16,
-                      color: colorTextMuted,
-                    ),
-                    const SizedBox(width: 4),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF3B5CF6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.light_mode,
-                        size: 14,
-                        color: colorTextWhite,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          body: SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final bool isWide = constraints.maxWidth > 650;
-                final double hPad = isWide ? 48.0 : 16.0;
-
-                return Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
-                    child: Column(
-                      children: [
-                        // ── Tab bar ──────────────────────────────────────────
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: hPad,
-                            vertical: 8,
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: colorTabBg,
-                              borderRadius: BorderRadius.circular(12),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: horizontalPadding,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // --- TOP PROGRESS STEPPER (ALL STEPS COMPLETED) ---
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Step 4 of 4',
+                                  style: TextStyle(
+                                    color: colorTextMuted,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                _buildCompletedStepper(),
+                              ],
                             ),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
+                            const SizedBox(height: 28),
+
+                            // --- SUCCESS RADIAL VECTOR SHIELD ---
+                            Center(
+                              child: Container(
+                                width: 84,
+                                height: 84,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: RadialGradient(
+                                    colors: [
+                                      colorBlue.withOpacity(0.2),
+                                      Colors.transparent,
+                                    ],
+                                  ),
+                                  border: Border.all(
+                                    color: colorBlue.withOpacity(0.6),
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.check_rounded,
+                                    color: colorBlue,
+                                    size: 40,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // --- MAIN HEADERS ---
+                            const Text(
+                              'Your Career Path\nis Ready!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: colorTextWhite,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                height: 1.3,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'We created the best career roadmap\nbased on your profile.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: colorTextMuted,
+                                fontSize: 13,
+                                height: 1.4,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+
+                            // --- SELECTION SUMMARY CARDS ROW ---
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildSummaryBadge(
+                                    'Stream',
+                                    'Science',
+                                    Icons.science_outlined,
+                                    const Color(0xFF0F2447),
+                                    colorBlue,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildSummaryBadge(
+                                    'Course',
+                                    'B.Tech Computer\nScience',
+                                    Icons.code_rounded,
+                                    const Color(0xFF092524),
+                                    colorMint,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+
+                            // --- MATCH SCORE SCORECARD ---
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: colorCardBg,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: colorBorderDefault),
+                              ),
                               child: Row(
                                 children: [
-                                  _buildSubTab(0, 'Overview'),
-                                  _buildSubTab(1, 'Detailed Result'),
-                                  _buildSubTab(2, 'Step-by-Step'),
-                                  _buildSubTab(3, 'Summary'),
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      const SizedBox(
+                                        width: 60,
+                                        height: 60,
+                                        child: CircularProgressIndicator(
+                                          value: 0.92,
+                                          strokeWidth: 5,
+                                          backgroundColor: Color(0xFF112237),
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                colorBlue,
+                                              ),
+                                        ),
+                                      ),
+                                      Text(
+                                        '92%',
+                                        style: TextStyle(
+                                          color: colorTextWhite,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Your Career Match Score',
+                                          style: TextStyle(
+                                            color: colorTextMuted,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          children: const [
+                                            Text(
+                                              'Excellent Match ',
+                                              style: TextStyle(
+                                                color: colorMint,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.star_rounded,
+                                              color: Colors.amber,
+                                              size: 16,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 2),
+                                        const Text(
+                                          'You are on the right path!',
+                                          style: TextStyle(
+                                            color: colorTextMuted,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          ),
-                        ),
+                            const SizedBox(height: 28),
 
-                        // ── Scrollable body ──────────────────────────────────
-                        Expanded(
-                          child: SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: hPad,
-                              vertical: 12,
+                            // --- TOP CAREER RECOMMENDATIONS ---
+                            const Text(
+                              'Top Career Recommendations',
+                              style: TextStyle(
+                                color: colorTextWhite,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // 1. Score card (now dynamic + animated)
-                                _buildOverallScoreCard(
-                                  resume.name,
-                                  score,
-                                  scorePercent,
-                                  accentColor,
-                                  resume.summary,
-                                ),
-                                const SizedBox(height: 24),
-
-                                // 2. Missing Skills (from Screen 2)
-                                _buildSectionHeader(
-                                  'Missing Skills',
-                                  Colors.amber,
-                                ),
-                                const SizedBox(height: 12),
-                                _buildMissingSkillsCard(resume.missingSkills),
-                                const SizedBox(height: 24),
-
-                                // 3. Critical Gaps (now dynamic)
-                                _buildSectionHeader(
-                                  'Critical Gaps',
-                                  colorRedAccent,
-                                ),
-                                const SizedBox(height: 12),
-                                _buildDynamicCardList(
-                                  resume.criticalGaps,
-                                  Icons.info,
-                                  colorRedAccent,
-                                ),
-                                const SizedBox(height: 24),
-
-                                // 4. Key Strengths (now dynamic)
-                                _buildSectionHeader(
-                                  'Key Strengths',
-                                  colorBlueAccent,
-                                ),
-                                const SizedBox(height: 12),
-                                _buildDynamicCardList(
-                                  resume.keyStrengths,
-                                  Icons.done_all_sharp,
-                                  colorBlueAccent,
-                                ),
-                                const SizedBox(height: 24),
-
-                                // 5. Step-by-Step Optimization (now dynamic)
-                                _buildSectionHeader(
-                                  'Step-by-Step Optimization',
-                                  colorMint,
-                                ),
-                                const SizedBox(height: 12),
-                                _buildOptimizationStepsList(
-                                  resume.optimizationSteps,
-                                ),
-                                const SizedBox(height: 24),
-
-                                // 6. AI Recommendation & Market Match (now dynamic)
-                                isWide
-                                    ? Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: _buildAiRecommendationCard(
-                                              resume.aiRecommendation,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          Expanded(
-                                            child: _buildMarketMatchCard(
-                                              resume.marketMatch,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : Column(
-                                        children: [
-                                          _buildAiRecommendationCard(
-                                            resume.aiRecommendation,
-                                          ),
-                                          const SizedBox(height: 12),
-                                          _buildMarketMatchCard(
-                                            resume.marketMatch,
-                                          ),
-                                        ],
-                                      ),
-                                const SizedBox(height: 20),
-
-                                // 7. Motivational footer text (from Screen 2)
-                                Center(
-                                  child: Text(
-                                    'Every improvement here brings you closer to your dream job.'
-                                        .toUpperCase(),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: colorTextMuted,
-                                      fontSize: 11,
-                                      letterSpacing: 1.5,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 32),
-                              ],
+                            const SizedBox(height: 12),
+                            _buildRecommendationItem(
+                              1,
+                              'Software Engineer',
+                              '96% Match',
+                              colorBlue,
+                              colorCardBg,
+                              colorBorderDefault,
                             ),
-                          ),
+                            const SizedBox(height: 8),
+                            _buildRecommendationItem(
+                              2,
+                              'Data Scientist',
+                              '92% Match',
+                              const Color(0xFF8B5CF6),
+                              colorCardBg,
+                              colorBorderDefault,
+                            ),
+                            const SizedBox(height: 8),
+                            _buildRecommendationItem(
+                              3,
+                              'AI Engineer',
+                              '89% Match',
+                              Colors.amber,
+                              colorCardBg,
+                              colorBorderDefault,
+                            ),
+                            const SizedBox(height: 8),
+                            _buildRecommendationItem(
+                              4,
+                              'Cyber Security Analyst',
+                              '85% Match',
+                              colorMint,
+                              colorCardBg,
+                              colorBorderDefault,
+                            ),
+                            const SizedBox(height: 28),
+
+                            // --- 4-YEAR ROADMAP PREVIEW ---
+                            const Text(
+                              'Your 4-Year Roadmap Preview',
+                              style: TextStyle(
+                                color: colorTextWhite,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _buildTimelineRoadmap(
+                              colorBorderDefault,
+                              colorMuted: colorTextMuted,
+                              colorWhite: colorTextWhite,
+                            ),
+                            const SizedBox(height: 24),
+                          ],
                         ),
-
-                        // ── Sticky footer ────────────────────────────────────
-                        _buildStickyFooterBar(),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // ── Tab segment ─────────────────────────────────────────────────────────────
-  Widget _buildSubTab(int index, String label) {
-    final bool isSelected = _activeTabIdx == index;
-    return GestureDetector(
-      onTap: () => setState(() => _activeTabIdx = index),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? colorTabActiveBg : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? colorTextWhite : colorTextMuted,
-            fontSize: 13,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ── Section header ───────────────────────────────────────────────────────────
-  Widget _buildSectionHeader(String title, Color barColor) {
-    return Row(
-      children: [
-        Container(
-          width: 4,
-          height: 18,
-          decoration: BoxDecoration(
-            color: barColor,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          title,
-          style: const TextStyle(
-            color: colorTextWhite,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ── Overall score card (animated, dynamic, shows candidate name) ─────────────
-  Widget _buildOverallScoreCard(
-    String name,
-    int score,
-    double scorePercent,
-    Color accentColor,
-    String summary,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: colorCardBg,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Candidate name
-          if (name.isNotEmpty) ...[
-            Text(
-              name,
-              style: const TextStyle(
-                color: colorTextWhite,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-          ],
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Overall Score',
-                      style: TextStyle(color: colorTextMuted, fontSize: 14),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '$score/100',
-                      style: TextStyle(
-                        color: accentColor,
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      summary.isNotEmpty
-                          ? summary
-                          : 'Great job! Your resume looks strong.',
-                      style: const TextStyle(
-                        color: colorTextMuted,
-                        fontSize: 13,
-                        height: 1.4,
-                      ),
-                    ),
+
+                    // --- ACTIONS FOOTER LAYER ACTION BUTTONS ---
+                    _buildFooterActions(colorTextWhite, colorTextMuted),
                   ],
                 ),
               ),
-              const SizedBox(width: 16),
-              // Animated circular indicator
-              AnimatedBuilder(
-                animation: _scoreAnim,
-                builder: (_, __) {
-                  final double animatedValue = scorePercent * _scoreAnim.value;
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 84,
-                        height: 84,
-                        child: CircularProgressIndicator(
-                          value: animatedValue,
-                          strokeWidth: 7,
-                          backgroundColor: const Color(0xFF112237),
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            accentColor,
-                          ),
-                          strokeCap: StrokeCap.round,
-                        ),
-                      ),
-                      Text(
-                        '${(score * _scoreAnim.value).round()}',
-                        style: TextStyle(
-                          color: accentColor,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  // ── Missing Skills card (new from Screen 2) ──────────────────────────────────
-  Widget _buildMissingSkillsCard(List missingSkills) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorCardBg,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(CupertinoIcons.sparkles, color: Colors.amber, size: 18),
-              const SizedBox(width: 8),
-              const Text(
-                'MISSING SKILLS',
-                style: TextStyle(
-                  color: colorTextMuted,
-                  fontSize: 12,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w600,
-                ),
+  // Completed Step design engine
+  Widget _buildCompletedStepper() {
+    return Row(
+      children: List.generate(4, (index) {
+        return Row(
+          children: [
+            Container(
+              width: 18,
+              height: 18,
+              decoration: const BoxDecoration(
+                color: Color(0xFF00D2A0),
+                shape: BoxShape.circle,
               ),
-            ],
-          ),
-          if (missingSkills.isNotEmpty) ...[
-            const SizedBox(height: 14),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: missingSkills
-                  .map<Widget>((skill) => _buildSkillChip(skill.toString()))
-                  .toList(),
+              child: const Center(
+                child: Icon(Icons.check, color: Colors.white, size: 10),
+              ),
             ),
-          ] else ...[
-            const SizedBox(height: 10),
-            const Text(
-              'No missing skills detected.',
-              style: TextStyle(color: colorTextMuted, fontSize: 13),
-            ),
+            if (index != 3)
+              Container(width: 14, height: 1.5, color: const Color(0xFF00D2A0)),
           ],
-        ],
-      ),
+        );
+      }),
     );
   }
 
-  Widget _buildSkillChip(String skill) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.amber.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.amber.withOpacity(0.3), width: 1),
-      ),
-      child: Text(
-        skill,
-        style: const TextStyle(
-          color: Colors.amber,
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  // ── Dynamic card list for Gaps / Strengths (driven by CardModel list) ────────
-  Widget _buildDynamicCardList(
-    List<CardModel> items,
+  // Dynamic Horizontal selection metadata tracker helper
+  Widget _buildSummaryBadge(
+    String tag,
+    String label,
     IconData icon,
-    Color iconColor,
+    Color bg,
+    Color accent,
   ) {
-    if (items.isEmpty) {
-      return Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colorCardBg,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Text(
-          'No items found.',
-          style: TextStyle(color: colorTextMuted, fontSize: 13),
-        ),
-      );
-    }
     return Container(
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: colorCardBg,
-        borderRadius: BorderRadius.circular(16),
+        color: const Color(0xFF0A1424),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFF13233A)),
       ),
-      child: Column(
-        children: items.asMap().entries.map((entry) {
-          final int idx = entry.key;
-          final CardModel item = entry.value;
-          return Column(
-            children: [
-              _buildRowItem(icon, iconColor, item.title, item.description),
-              if (idx != items.length - 1)
-                const Divider(color: Color(0xFF142438), height: 1),
-            ],
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  // ── Optimization steps list (now driven by dynamic data) ─────────────────────
-  Widget _buildOptimizationStepsList(List steps) {
-    if (steps.isEmpty) {
-      return Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colorCardBg,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Text(
-          'No optimization steps available.',
-          style: TextStyle(color: colorTextMuted, fontSize: 13),
-        ),
-      );
-    }
-    return Container(
-      decoration: BoxDecoration(
-        color: colorCardBg,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: steps.asMap().entries.map((entry) {
-          final int idx = entry.key;
-          final String text = entry.value.toString();
-          return Column(
-            children: [
-              ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
-                leading: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: colorMint.withOpacity(0.12),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.keyboard_double_arrow_right_rounded,
-                    color: colorMint,
-                    size: 14,
-                  ),
-                ),
-                title: Text(
-                  text,
-                  style: const TextStyle(color: colorTextWhite, fontSize: 14),
-                ),
-                trailing: const Icon(
-                  Icons.chevron_right,
-                  color: colorTextMuted,
-                  size: 18,
-                ),
-                onTap: () {},
-              ),
-              if (idx != steps.length - 1)
-                const Divider(color: Color(0xFF142438), height: 1),
-            ],
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  // ── AI Recommendation card (now dynamic) ─────────────────────────────────────
-  Widget _buildAiRecommendationCard(String recommendation) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorCardBg,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E2D4A),
-                  borderRadius: BorderRadius.circular(10),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: accent, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  tag,
+                  style: const TextStyle(
+                    color: Color(0xFF6B7A90),
+                    fontSize: 11,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.psychology_outlined,
-                  color: Colors.blueAccent,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Text(
-                  'AI Recommendation',
-                  style: TextStyle(
-                    color: colorTextWhite,
-                    fontSize: 14,
+                const SizedBox(height: 2),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            recommendation.isNotEmpty
-                ? recommendation
-                : 'No recommendation available.',
-            style: const TextStyle(
-              color: colorTextMuted,
-              fontSize: 13,
-              height: 1.4,
+              ],
             ),
           ),
         ],
@@ -670,88 +383,190 @@ class _ResumeAnalysisResultsScreenState
     );
   }
 
-  // ── Market Match card (now dynamic) ──────────────────────────────────────────
-  Widget _buildMarketMatchCard(String marketMatch) {
+  // Row tile decorator helper for list entries
+  Widget _buildRecommendationItem(
+    int num,
+    String role,
+    String percent,
+    Color badgeColor,
+    Color bg,
+    Color border,
+  ) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: colorCardBg,
-        borderRadius: BorderRadius.circular(16),
+        color: bg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: border),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Container(
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+              color: badgeColor.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Center(
+              child: Text(
+                '$num',
+                style: TextStyle(
+                  color: badgeColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              role,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Text(
+            percent,
+            style: const TextStyle(
+              color: Color(0xFF00D2A0),
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(width: 8),
+          const Icon(
+            Icons.chevron_right_rounded,
+            color: Color(0xFF33475E),
+            size: 16,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Custom Horizontal Timeline Builder matching Roadmap preview node structures
+  Widget _buildTimelineRoadmap(
+    Color dividerColor, {
+    required Color colorMuted,
+    required Color colorWhite,
+  }) {
+    final List<Map<String, String>> timelineData = [
+      {
+        'year': 'Year 1',
+        'focus': 'Learn\nFundamentals',
+        'iconBg': '0xFF0F2447',
+        'iconColor': '0xFF3B82F6',
+        'icon': 'Icons.school_outlined',
+      },
+      {
+        'year': 'Year 2',
+        'focus': 'Build\nProjects',
+        'iconBg': '0xFF1B1938',
+        'iconColor': '0xFF8B5CF6',
+        'icon': 'Icons.architecture',
+      },
+      {
+        'year': 'Year 3',
+        'focus': 'Internship\n& Experience',
+        'iconBg': '0xFF08243A',
+        'iconColor': '0xFF00A2E8',
+        'icon': 'Icons.business_center_outlined',
+      },
+      {
+        'year': 'Year 4',
+        'focus': 'Placement\nPreparation',
+        'iconBg': '0xFF0C251F',
+        'iconColor': '0xFF10B981',
+        'icon': 'Icons.gavel_outlined',
+      },
+    ];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: timelineData.asMap().entries.map((entry) {
+        int idx = entry.key;
+        var data = entry.value;
+
+        return Expanded(
+          child: Column(
             children: [
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0F2E28),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(
-                      Icons.trending_up,
-                      color: colorMint,
-                      size: 20,
+                  Expanded(
+                    child: Divider(
+                      color: idx == 0 ? Colors.transparent : dividerColor,
+                      thickness: 1,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  const Text(
-                    'Market Match',
-                    style: TextStyle(
-                      color: colorTextWhite,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Color(int.parse(data['iconBg']!)),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Color(
+                          int.parse(data['iconColor']!),
+                        ).withOpacity(0.4),
+                      ),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        idx == 0
+                            ? Icons.school_outlined
+                            : idx == 1
+                            ? Icons.star_border
+                            : idx == 2
+                            ? Icons.business_center_outlined
+                            : Icons.assignment_ind_outlined,
+                        color: Color(int.parse(data['iconColor']!)),
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: idx == timelineData.length - 1
+                          ? Colors.transparent
+                          : dividerColor,
+                      thickness: 1,
                     ),
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0F2E28),
-                  borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 8),
+              Text(
+                data['year']!,
+                style: TextStyle(
+                  color: colorWhite,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: const Text(
-                  'High',
-                  style: TextStyle(
-                    color: colorMint,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                data['focus']!,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: colorMuted, fontSize: 10, height: 1.3),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            marketMatch.isNotEmpty
-                ? marketMatch
-                : 'No market match data available.',
-            style: const TextStyle(
-              color: colorTextMuted,
-              fontSize: 13,
-              height: 1.4,
-            ),
-          ),
-        ],
-      ),
+        );
+      }).toList(),
     );
   }
 
-  // ── Sticky footer ─────────────────────────────────────────────────────────────
-  Widget _buildStickyFooterBar() {
+  // Footer Button row architecture configuration
+  Widget _buildFooterActions(Color textWhite, Color textMuted) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: const BoxDecoration(
-        color: colorBg,
-        border: Border(top: BorderSide(color: Color(0xFF101B2B), width: 1)),
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             height: 50,
@@ -759,10 +574,10 @@ class _ResumeAnalysisResultsScreenState
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               gradient: const LinearGradient(
-                colors: [Color(0xFF4D6FFF), Color(0xFF8B5CF6)],
+                colors: [Color(0xFF007BFF), Color(0xFF0052D4)],
               ),
             ),
-            child: ElevatedButton.icon(
+            child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
@@ -771,82 +586,52 @@ class _ResumeAnalysisResultsScreenState
                 ),
               ),
               onPressed: () {},
-              icon: const Icon(
-                Icons.upload_outlined,
-                color: colorTextWhite,
-                size: 20,
-              ),
-              label: const Text(
-                'Upload New Resume',
-                style: TextStyle(
-                  color: colorTextWhite,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'View Detailed Roadmap',
+                    style: TextStyle(
+                      color: textWhite,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_forward, color: textWhite, size: 16),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 14),
-          GestureDetector(
-            onTap: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(
-                  Icons.description_outlined,
-                  color: Color(0xFF5A75A5),
-                  size: 16,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'View Previous Analyses',
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextButton.icon(
+                onPressed: () {},
+                icon: Icon(Icons.download_outlined, color: textMuted, size: 18),
+                label: Text(
+                  'Download Report',
                   style: TextStyle(
-                    color: Color(0xFF5A75A5),
+                    color: textMuted,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── Shared row item (gaps & strengths) ────────────────────────────────────────
-  Widget _buildRowItem(
-    IconData icon,
-    Color iconColor,
-    String title,
-    String subTitle,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: iconColor, size: 22),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: colorTextWhite,
-                    fontSize: 14,
+              ),
+              TextButton.icon(
+                onPressed: () {},
+                icon: Icon(Icons.grid_view_rounded, color: textMuted, size: 16),
+                label: Text(
+                  'Go to Dashboard',
+                  style: TextStyle(
+                    color: textMuted,
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subTitle,
-                  style: const TextStyle(color: colorTextMuted, fontSize: 13),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

@@ -6,6 +6,9 @@ import 'package:hackathon/config/app_config.dart';
 import 'package:hackathon/firebase_options.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
+import 'package:hackathon/screen/explore_careers/degree_chooser/controller/DegreeChooserController.dart';
+import 'package:hackathon/screen/explore_careers/path_chooser/controller/path_chooser_controller.dart';
+import 'package:hackathon/screen/explore_careers/stream_chooser/controller/stream_chooser_controller.dart';
 import 'package:hackathon/screen/home/home_screen.dart';
 import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
@@ -14,6 +17,7 @@ import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
+import 'package:hackathon/test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,6 +41,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => Taskprovider()),
         ChangeNotifierProvider(create: (context) => Userprovider()),
         ChangeNotifierProvider(create: (context) => ChatProvider()),
+        ChangeNotifierProvider(create: (_) => DegreeChooserController()),
+        ChangeNotifierProvider(create: (_) => CareerPathController()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),
@@ -62,7 +68,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: BottomNav(),
-      // home: const ChooseStreamScreen(),
+      // home: const CareerPathReadyScreen(),
     );
   }
 }

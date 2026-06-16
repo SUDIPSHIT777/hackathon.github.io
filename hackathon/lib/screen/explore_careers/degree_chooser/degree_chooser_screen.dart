@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/state_manager.dart';
+import 'package:hackathon/screen/explore_careers/degree_chooser/controller/DegreeChooserController.dart';
 import 'package:hackathon/screen/explore_careers/path_chooser/path_chooser_screen.dart';
+import 'package:provider/provider.dart';
 
 class DegreeChooserScreen extends StatefulWidget {
-  const DegreeChooserScreen({super.key});
+  final String stream;
+
+  const DegreeChooserScreen({super.key, required this.stream});
 
   @override
   State<DegreeChooserScreen> createState() => _DegreeChooserScreenState();
@@ -15,72 +19,80 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
   int _selectedDegreeIdx = 0;
 
   // Mock degree data extracted exactly from Step 2 of your reference image
-  final List<Map<String, dynamic>> _degrees = [
-    {
-      'title': 'B.Tech Computer Science',
-      'duration': 'Duration: 4 Years',
-      'salary': '₹ 8 - 18 LPA',
-      'icon': Icons.code_rounded,
-      'iconColor': const Color(0xFF3B82F6),
-      'iconBg': const Color(0xFF0F2447),
-    },
-    {
-      'title': 'B.Sc',
-      'duration': 'Duration: 3 Years',
-      'salary': '₹ 3 - 6 LPA',
-      'icon': Icons.science_outlined,
-      'iconColor': const Color(0xFF00D2A0),
-      'iconBg': const Color(0xFF092524),
-    },
-    {
-      'title': 'BCA',
-      'duration': 'Duration: 3 Years',
-      'salary': '₹ 4 - 8 LPA',
-      'icon': Icons.terminal_rounded,
-      'iconColor': const Color(0xFFF59E0B),
-      'iconBg': const Color(0xFF2A2011),
-    },
-    {
-      'title': 'MBBS',
-      'duration': 'Duration: 5.5 Years',
-      'salary': '₹ 10 - 25 LPA',
-      'icon': Icons.health_and_safety_outlined,
-      'iconColor': const Color(0xFFEF4444),
-      'iconBg': const Color(0xFF2C141A),
-    },
-    {
-      'title': 'B.Pharm',
-      'duration': 'Duration: 4 Years',
-      'salary': '₹ 4 - 7 LPA',
-      'icon': Icons.medication_liquid_outlined,
-      'iconColor': const Color(0xFF8B5CF6),
-      'iconBg': const Color(0xFF1B1938),
-    },
-    {
-      'title': 'Biotechnology',
-      'duration': 'Duration: 4 Years',
-      'salary': '₹ 4 - 8 LPA',
-      'icon': Icons.biotech_outlined,
-      'iconColor': const Color(0xFF00A2E8),
-      'iconBg': const Color(0xFF08243A),
-    },
-    {
-      'title': 'Data Science',
-      'duration': 'Duration: 3-4 Years',
-      'salary': '₹ 6 - 14 LPA',
-      'icon': Icons.hub_outlined,
-      'iconColor': const Color(0xFFEC4899),
-      'iconBg': const Color(0xFF2B1428),
-    },
-    {
-      'title': 'Environmental Science',
-      'duration': 'Duration: 3 Years',
-      'salary': '₹ 3 - 6 LPA',
-      'icon': Icons.eco_outlined,
-      'iconColor': const Color(0xFF10B981),
-      'iconBg': const Color(0xFF0C251F),
-    },
-  ];
+  // final List<Map<String, dynamic>> _degrees = [
+  //   {
+  //     'title': 'B.Tech Computer Science',
+  //     'duration': 'Duration: 4 Years',
+  //     'salary': '₹ 8 - 18 LPA',
+  //     'icon': Icons.code_rounded,
+  //     'iconColor': const Color(0xFF3B82F6),
+  //     'iconBg': const Color(0xFF0F2447),
+  //   },
+  //   {
+  //     'title': 'B.Sc',
+  //     'duration': 'Duration: 3 Years',
+  //     'salary': '₹ 3 - 6 LPA',
+  //     'icon': Icons.science_outlined,
+  //     'iconColor': const Color(0xFF00D2A0),
+  //     'iconBg': const Color(0xFF092524),
+  //   },
+  //   {
+  //     'title': 'BCA',
+  //     'duration': 'Duration: 3 Years',
+  //     'salary': '₹ 4 - 8 LPA',
+  //     'icon': Icons.terminal_rounded,
+  //     'iconColor': const Color(0xFFF59E0B),
+  //     'iconBg': const Color(0xFF2A2011),
+  //   },
+  //   {
+  //     'title': 'MBBS',
+  //     'duration': 'Duration: 5.5 Years',
+  //     'salary': '₹ 10 - 25 LPA',
+  //     'icon': Icons.health_and_safety_outlined,
+  //     'iconColor': const Color(0xFFEF4444),
+  //     'iconBg': const Color(0xFF2C141A),
+  //   },
+  //   {
+  //     'title': 'B.Pharm',
+  //     'duration': 'Duration: 4 Years',
+  //     'salary': '₹ 4 - 7 LPA',
+  //     'icon': Icons.medication_liquid_outlined,
+  //     'iconColor': const Color(0xFF8B5CF6),
+  //     'iconBg': const Color(0xFF1B1938),
+  //   },
+  //   {
+  //     'title': 'Biotechnology',
+  //     'duration': 'Duration: 4 Years',
+  //     'salary': '₹ 4 - 8 LPA',
+  //     'icon': Icons.biotech_outlined,
+  //     'iconColor': const Color(0xFF00A2E8),
+  //     'iconBg': const Color(0xFF08243A),
+  //   },
+  //   {
+  //     'title': 'Data Science',
+  //     'duration': 'Duration: 3-4 Years',
+  //     'salary': '₹ 6 - 14 LPA',
+  //     'icon': Icons.hub_outlined,
+  //     'iconColor': const Color(0xFFEC4899),
+  //     'iconBg': const Color(0xFF2B1428),
+  //   },
+  //   {
+  //     'title': 'Environmental Science',
+  //     'duration': 'Duration: 3 Years',
+  //     'salary': '₹ 3 - 6 LPA',
+  //     'icon': Icons.eco_outlined,
+  //     'iconColor': const Color(0xFF10B981),
+  //     'iconBg': const Color(0xFF0C251F),
+  //   },
+  // ];
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context.read<DegreeChooserController>().loadDegrees(widget.stream);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,8 +174,8 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
                             const SizedBox(height: 8),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Text(
+                              children: [
+                                const Text(
                                   'Select the course you want to pursue in ',
                                   style: TextStyle(
                                     color: colorTextMuted,
@@ -171,8 +183,8 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'Science stream.',
-                                  style: TextStyle(
+                                  '${widget.stream} stream.',
+                                  style: const TextStyle(
                                     color: Color(0xFF3B82F6),
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -183,188 +195,217 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
                             const SizedBox(height: 24),
 
                             // --- SEARCH FILTER BAR WITH INTEGRATED TUNING ICON ---
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: colorSearchBg,
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: colorBorderDefault,
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: const TextField(
-                                      style: TextStyle(
-                                        color: colorTextWhite,
-                                        fontSize: 14,
-                                      ),
-                                      decoration: InputDecoration(
-                                        hintText: 'Search course',
-                                        hintStyle: TextStyle(
-                                          color: Color(0xFF435368),
-                                          fontSize: 14,
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.search,
-                                          color: Color(0xFF435368),
-                                          size: 20,
-                                        ),
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.symmetric(
-                                          vertical: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                // Tuning option icon block
-                                Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: colorSearchBg,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: colorBorderDefault,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                    Icons.tune_rounded,
-                                    color: Color(0xFF3B82F6),
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   children: [
+                            //     Expanded(
+                            //       child: Container(
+                            //         height: 50,
+                            //         decoration: BoxDecoration(
+                            //           color: colorSearchBg,
+                            //           borderRadius: BorderRadius.circular(12),
+                            //           border: Border.all(
+                            //             color: colorBorderDefault,
+                            //             width: 1,
+                            //           ),
+                            //         ),
+                            //         child: const TextField(
+                            //           style: TextStyle(
+                            //             color: colorTextWhite,
+                            //             fontSize: 14,
+                            //           ),
+                            //           decoration: InputDecoration(
+                            //             hintText: 'Search course',
+                            //             hintStyle: TextStyle(
+                            //               color: Color(0xFF435368),
+                            //               fontSize: 14,
+                            //             ),
+                            //             prefixIcon: Icon(
+                            //               Icons.search,
+                            //               color: Color(0xFF435368),
+                            //               size: 20,
+                            //             ),
+                            //             border: InputBorder.none,
+                            //             contentPadding: EdgeInsets.symmetric(
+                            //               vertical: 14,
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     const SizedBox(width: 12),
+                            //     // Tuning option icon block
+                            //     Container(
+                            //       height: 50,
+                            //       width: 50,
+                            //       decoration: BoxDecoration(
+                            //         color: colorSearchBg,
+                            //         borderRadius: BorderRadius.circular(12),
+                            //         border: Border.all(
+                            //           color: colorBorderDefault,
+                            //           width: 1,
+                            //         ),
+                            //       ),
+                            //       child: const Icon(
+                            //         Icons.tune_rounded,
+                            //         color: Color(0xFF3B82F6),
+                            //         size: 20,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                             const SizedBox(height: 24),
-
-                            // --- LIST VIEW LAYOUT FOR DEGREES ---
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _degrees.length,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(height: 12),
-                              itemBuilder: (context, index) {
-                                final degree = _degrees[index];
-                                final bool isSelected =
-                                    _selectedDegreeIdx == index;
-                                final Color currentAccent = degree['iconColor'];
-
-                                return GestureDetector(
-                                  onTap: () => setState(
-                                    () => _selectedDegreeIdx = index,
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(14),
-                                    decoration: BoxDecoration(
-                                      color: colorCardBg,
-                                      borderRadius: BorderRadius.circular(14),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? currentAccent
-                                            : colorBorderDefault,
-                                        width: isSelected ? 1.5 : 1.0,
+                            Consumer<DegreeChooserController>(
+                              builder: (context, controller, child) {
+                                if (controller.isLoading) {
+                                  return const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(40),
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
                                       ),
                                     ),
-                                    child: Row(
-                                      children: [
-                                        // Staged custom tinted icon box matching stream specifications
-                                        Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: degree['iconBg'],
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
+                                  );
+                                }
+
+                                return ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: controller.degrees.length,
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(height: 12),
+                                  itemBuilder: (context, index) {
+                                    final degree = controller.degrees[index];
+
+                                    final Color currentAccent =
+                                        degreeColors[index %
+                                            degreeColors.length];
+
+                                    final Color currentBg =
+                                        degreeBgColors[index %
+                                            degreeBgColors.length];
+
+                                    final bool isSelected =
+                                        _selectedDegreeIdx == index;
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedDegreeIdx = index;
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(14),
+                                        decoration: BoxDecoration(
+                                          color: colorCardBg,
+                                          borderRadius: BorderRadius.circular(
+                                            14,
                                           ),
-                                          child: Icon(
-                                            degree['icon'],
-                                            color: currentAccent,
-                                            size: 22,
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? currentAccent
+                                                : colorBorderDefault,
+                                            width: isSelected ? 1.5 : 1,
                                           ),
                                         ),
-                                        const SizedBox(width: 16),
-
-                                        // Core Information metadata blocks
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                degree['title'],
-                                                style: const TextStyle(
-                                                  color: colorTextWhite,
-                                                  fontSize: 14.5,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: currentBg,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                               ),
-                                              const SizedBox(height: 4),
-                                              Row(
+                                              child: Icon(
+                                                Icons.school_outlined,
+                                                color: currentAccent,
+                                                size: 22,
+                                              ),
+                                            ),
+
+                                            const SizedBox(width: 16),
+
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    degree['duration'],
+                                                    degree.title,
                                                     style: const TextStyle(
-                                                      color: colorTextMuted,
-                                                      fontSize: 12,
+                                                      color: Colors.white,
+                                                      fontSize: 14.5,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
-                                                  const SizedBox(width: 16),
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 3,
+
+                                                  const SizedBox(height: 4),
+
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        degree.duration,
+                                                        style: const TextStyle(
+                                                          color: colorTextMuted,
+                                                          fontSize: 12,
                                                         ),
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                        0xFF112239,
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            6,
+
+                                                      const SizedBox(width: 16),
+
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets.symmetric(
+                                                              horizontal: 8,
+                                                              vertical: 3,
+                                                            ),
+                                                        decoration: BoxDecoration(
+                                                          color: const Color(
+                                                            0xFF112239,
                                                           ),
-                                                    ),
-                                                    child: Text(
-                                                      degree['salary'],
-                                                      style: TextStyle(
-                                                        color: isSelected
-                                                            ? currentAccent
-                                                            : colorTextWhite,
-                                                        fontSize: 11,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                6,
+                                                              ),
+                                                        ),
+                                                        child: Text(
+                                                          degree.salary,
+                                                          style: TextStyle(
+                                                            color: isSelected
+                                                                ? currentAccent
+                                                                : Colors.white,
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
+                                            ),
 
-                                        // Dynamic selection ring components
-                                        Icon(
-                                          isSelected
-                                              ? Icons.check_circle
-                                              : Icons.radio_button_off_outlined,
-                                          color: isSelected
-                                              ? currentAccent
-                                              : const Color(0xFF33475E),
-                                          size: 22,
+                                            Icon(
+                                              isSelected
+                                                  ? Icons.check_circle
+                                                  : Icons
+                                                        .radio_button_off_outlined,
+                                              color: isSelected
+                                                  ? currentAccent
+                                                  : const Color(0xFF33475E),
+                                              size: 22,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
+                            // --- LIST VIEW LAYOUT FOR DEGREES ---
                             const SizedBox(height: 24),
                           ],
                         ),
@@ -397,11 +438,21 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
                             ),
                           ),
                           onPressed: () {
+                            final degreeController = context
+                                .read<DegreeChooserController>();
+
+                            if (degreeController.degrees.isEmpty) return;
+
+                            final selectedDegree =
+                                degreeController.degrees[_selectedDegreeIdx];
+
                             Get.to(
-                              () => PathChooserScreen(),
+                              () => PathChooserScreen(
+                                stream: widget.stream,
+                                degree: selectedDegree.title,
+                              ),
                               transition: Transition.rightToLeft,
                             );
-                            // Link routing transitions towards Step 3 panel components
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -435,6 +486,26 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
     );
   }
 
+  final List<Color> degreeColors = [
+    const Color(0xFF3B82F6),
+    const Color(0xFF00D2A0),
+    const Color(0xFFF59E0B),
+    const Color(0xFFEF4444),
+    const Color(0xFF8B5CF6),
+    const Color(0xFF00A2E8),
+    const Color(0xFFEC4899),
+    const Color(0xFF10B981),
+  ];
+  final List<Color> degreeBgColors = [
+    const Color(0xFF0F2447),
+    const Color(0xFF092524),
+    const Color(0xFF2A2011),
+    const Color(0xFF2C141A),
+    const Color(0xFF1B1938),
+    const Color(0xFF08243A),
+    const Color(0xFF2B1428),
+    const Color(0xFF0C251F),
+  ];
   // Linear custom tracker element mirroring the 4-step circle architecture sequence
   Widget _buildStepperTracker(Color baseBorder) {
     return Row(

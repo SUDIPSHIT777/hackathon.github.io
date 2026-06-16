@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+import 'package:hackathon/screen/explore_careers/degree_chooser/controller/DegreeChooserController.dart';
 import 'package:hackathon/screen/explore_careers/degree_chooser/degree_chooser_screen.dart';
+import 'package:provider/provider.dart';
 
 class ChooseStreamScreen extends StatefulWidget {
   const ChooseStreamScreen({super.key});
@@ -329,11 +331,14 @@ class _ChooseStreamScreenState extends State<ChooseStreamScreen> {
                             ),
                           ),
                           onPressed: () {
-                            // Forward navigation stack operations
-                            Get.to(
-                              () => DegreeChooserScreen(),
-                              transition: Transition.rightToLeft,
-                            );
+                            final stream =
+                                _streams[_selectedCardIndex]['title'];
+
+                            // context.read<DegreeChooserController>().loadDegrees(
+                            //   stream,
+                            // );
+
+                            Get.to(() => DegreeChooserScreen(stream: stream));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
