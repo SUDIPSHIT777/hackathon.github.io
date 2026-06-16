@@ -13,6 +13,7 @@ import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
 import 'package:hackathon/screen/signup/authwrapper.dart';
+import 'package:hackathon/screen/splash_screen.dart';
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
@@ -58,9 +59,7 @@ class MyApp extends StatelessWidget {
           surface: const Color(0xff051429), // For fallback surface blends
         ),
       ),
-      home: FirebaseAuth.instance.currentUser != null
-          ? const BottomNav()
-          : const LoginScreen(),
+      home: const CareerCompassPage(),
       // home: const CareerPathReadyScreen(),
     );
   }
