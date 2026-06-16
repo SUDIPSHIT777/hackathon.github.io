@@ -10,6 +10,6 @@ class Hackathon extends StatefulWidget {
 class _HackathonState extends State<Hackathon> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold();
   }
 }
