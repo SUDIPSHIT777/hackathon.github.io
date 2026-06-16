@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lifeos/feature/tasks/controller/taskprovider.dart';
-import 'package:lifeos/feature/tasks/ui/taskdetails.dart';
-import 'package:lifeos/feature/tasks/widget/deletetask.dart';
+import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
+import 'package:hackathon/screen/tasks/ui/taskdetails.dart';
+import 'package:hackathon/screen/tasks/widget/deletetask.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
