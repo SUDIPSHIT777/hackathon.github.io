@@ -1,29 +1,90 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
-import 'package:hackathon/screen/login/login.dart';
-import 'package:hackathon/screen/signup/signup.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({super.key});
+class AuthController extends ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+  bool isLoading = false;
+
+  Future<bool> signUp({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+
+      UserCredential credential = await _auth
+          .createUserWithEmailAndPassword(
+            email: email,
+            password: password,
           );
-        }
 
-        if (snapshot.hasData) {
-          return const BottomNav();
-        }
+      await credential.user?.updateDisplayName(name);
 
-        return const CreateAccountScreen();
-      },
-    );
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setBool("isLoggedIn", true);
+      await prefs.setString("name", name);
+      await prefs.setString("email", email);
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.message);
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
+
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+
+      UserCredential credential = await _auth
+          .signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setBool("isLoggedIn", true);
+      await prefs.setString(
+        "name",
+        credential.user?.displayName ?? "",
+      );
+      await prefs.setString(
+        "email",
+        credential.user?.email ?? "",
+      );
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.message);
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> logout() async {
+    await _auth.signOut();
+
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.clear();
+
+    notifyListeners();
+  }
+
+  User? get currentUser => _auth.currentUser;
 }

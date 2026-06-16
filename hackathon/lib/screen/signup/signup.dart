@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hackathon/screen/signup/authwrapper.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 
@@ -42,57 +44,59 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     super.dispose();
   }
 
-  Future<void> signUpUser() async {
-    final name = _nameController.text.trim();
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-    final confirmPassword = _confirmPasswordController.text.trim();
+Future<void> signUpUser() async {
+  final name = _nameController.text.trim();
+  final email = _emailController.text.trim();
+  final password = _passwordController.text.trim();
+  final confirmPassword =
+      _confirmPasswordController.text.trim();
 
-    if (name.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
-      return;
-    }
-
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
-      return;
-    }
-
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-
-      await userCredential.user?.updateDisplayName(name);
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Account Created Successfully')),
-      );
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.message ?? 'Signup Failed')));
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+  if (name.isEmpty ||
+      email.isEmpty ||
+      password.isEmpty ||
+      confirmPassword.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please fill all fields'),
+      ),
+    );
+    return;
   }
 
+  if (password != confirmPassword) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Passwords do not match'),
+      ),
+    );
+    return;
+  }
+
+  final success =
+      await context.read<AuthController>().signUp(
+        name: name,
+        email: email,
+        password: password,
+      );
+
+  if (!mounted) return;
+
+  if (success) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const BottomNav(),
+      ),
+      (route) => false,
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Signup Failed'),
+      ),
+    );
+  }
+}
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;

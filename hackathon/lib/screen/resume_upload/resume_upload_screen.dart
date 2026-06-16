@@ -7,7 +7,7 @@ class ResumeUploadScreen extends StatelessWidget {
   const ResumeUploadScreen({super.key});
 
   static const Color bgColor = Color(0xff051429);
-  static const Color cardBgColor = Color(0xFF071324);
+  static const Color cardBgColor = Color.fromARGB(255, 19, 38, 60);
   static const Color textWhite = Colors.white;
   static const Color textMuted = Color(0xFF6B7A90);
   static const Color accentCyan = Color(0xFF00E5FF);

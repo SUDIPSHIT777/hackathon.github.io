@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon/screen/home/home_screen.dart';
+import 'package:hackathon/screen/profile/profile.dart';
 import 'package:hackathon/screen/resume_upload/resume_upload_screen.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
@@ -64,12 +65,12 @@ class _BottomNavState extends State<BottomNav> {
             activeColor: Colors.cyan,
             inactiveColor: Colors.lightGreen,
           ),
-          BarItem(
-            icon: Icons.smart_toy_outlined,
-            title: 'Expert chat',
-            activeColor: Colors.amber,
-            inactiveColor: Colors.teal,
-          ),
+          // BarItem(
+          //   icon: Icons.smart_toy_outlined,
+          //   title: 'Expert chat',
+          //   activeColor: Colors.amber,
+          //   inactiveColor: Colors.teal,
+          // ),
           BarItem(
             icon: Icons.person_outline_sharp,
             title: 'Profile',
@@ -89,6 +90,6 @@ class _BottomNavState extends State<BottomNav> {
 List<Widget> _listOfWidget = <Widget>[
   HomeScreen(),
   ResumeUploadScreen(),
-  HomeScreen(),
-  HomeScreen(),
+  // HomeScreen(),
+  ProfileScreen(),
 ];

@@ -10,7 +10,7 @@ import 'package:hackathon/screen/explore_careers/degree_chooser/controller/Degre
 import 'package:hackathon/screen/explore_careers/path_chooser/controller/path_chooser_controller.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
-
+import 'package:hackathon/screen/signup/authwrapper.dart';
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
@@ -33,6 +33,9 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => DegreeChooserController()),
         ChangeNotifierProvider(create: (_) => CareerPathController()),
+        ChangeNotifierProvider(
+  create: (_) => AuthController(),
+),
       ],
       child: MyApp(),
     ),

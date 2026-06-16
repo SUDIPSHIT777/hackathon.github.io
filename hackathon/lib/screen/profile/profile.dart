@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:hackathon/screen/login/login.dart';
+import 'package:hackathon/screen/privecy_policy.dart';
+import 'package:hackathon/screen/signup/authwrapper.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -7,8 +12,9 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color backgroundColor = Color(0xFF060E19);
-    const Color cardBackgroundColor = Color(0xFF0C1929);
+    const Color backgroundColor = Color(0xff051429);
+    const Color cardBackgroundColor = Color.fromARGB(255, 19, 38, 60);
+
     const Color textWhiteColor = Colors.white;
     const Color textMutedColor = Color(0xFF7E8F9F);
     const Color actionIconColor = Color(0xFF5A6D82);
@@ -30,14 +36,6 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: textWhiteColor),
-            onPressed: () {
-              // Action handler for upper configurations
-            },
-          ),
-        ],
       ),
       body: SafeArea(
         child: LayoutBuilder(
@@ -126,70 +124,21 @@ class ProfileScreen extends StatelessWidget {
                             const SizedBox(height: 28),
 
                             // --- STATS METRIC GRID SYSTEM ---
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 8,
-                              ),
-                              decoration: const BoxDecoration(
-                                border: Border.symmetric(
-                                  horizontal: BorderSide(
-                                    color: borderStrokeColor,
-                                    width: 1,
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  _buildStatColumn(
-                                    '12',
-                                    'Goals',
-                                    textWhiteColor,
-                                    textMutedColor,
-                                  ),
-                                  _buildVerticalDivider(borderStrokeColor),
-                                  _buildStatColumn(
-                                    '8',
-                                    'Certificates',
-                                    textWhiteColor,
-                                    textMutedColor,
-                                  ),
-                                  _buildVerticalDivider(borderStrokeColor),
-                                  _buildStatColumn(
-                                    '5',
-                                    'Internships',
-                                    textWhiteColor,
-                                    textMutedColor,
-                                  ),
-                                ],
-                              ),
-                            ),
                             const SizedBox(height: 24),
 
                             // --- DASHBOARD ACTIONS MENU LIST ---
                             _buildMenuRow(
-                              Icons.grid_view_rounded,
-                              'My Activity',
-                              actionIconColor,
-                              textWhiteColor,
-                            ),
-                            _buildMenuRow(
-                              Icons.bookmark_border_rounded,
-                              'Saved Resources',
-                              actionIconColor,
-                              textWhiteColor,
-                            ),
-                            _buildMenuRow(
                               Icons.assignment_turned_in_outlined,
-                              'Applications',
+                              'Privecy policy',
                               actionIconColor,
                               textWhiteColor,
+                              onTap: () {
+                                Get.to(() => PrivacyPolicyScreen());
+                              },
                             ),
                             _buildMenuRow(
                               Icons.settings_outlined,
-                              'Settings',
+                              'Version\n V.0.1',
                               actionIconColor,
                               textWhiteColor,
                             ),
@@ -207,23 +156,9 @@ class ProfileScreen extends StatelessWidget {
                               const Color(0xFFE63946), // Red distinct color
                               const Color(0xFFE63946),
                               onTap: () async {
-                                // 1. Clear SharedPreferences
-                                final prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.setBool('isLoggedIn', false);
+                                await context.read<AuthController>().logout();
 
-                                // 2. Check mounted state
-                                if (!context.mounted) return;
-
-                                // 3. Navigate to Login and destroy previous routes
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginScreen(),
-                                  ),
-                                  (route) =>
-                                      false, // This ensures the user can't press back to return
-                                );
+                                Get.offAll(() => const LoginScreen());
                               },
                             ),
                             const SizedBox(height: 20),
@@ -238,28 +173,6 @@ class ProfileScreen extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildStatColumn(
-    String count,
-    String label,
-    Color countColor,
-    Color labelColor,
-  ) {
-    return Column(
-      children: [
-        Text(
-          count,
-          style: TextStyle(
-            color: countColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(label, style: TextStyle(color: labelColor, fontSize: 13)),
-      ],
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hackathon/screen/chatboat/ui/chatboatui.dart';
 import 'package:hackathon/screen/internship/ui/internship.dart';
 import 'package:hackathon/screen/resume_upload/resume_upload_screen.dart';
 import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_screen.dart';
@@ -42,6 +43,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Get.to(() => ChatScreen());
+      //   },
+      //   backgroundColor: const Color(
+      //     0xFF00E5FF,
+      //   ), // Accent Cyan matching your UI
+      //   child: const Icon(
+      //     Icons.psychology_outlined, // Clean AI/Mind icon
+      //     color: Color(0xff051429), // Dark contrast icon color
+      //     size: 28,
+      //   ),
+      // ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           bool isTablet = constraints.maxWidth > 600;
@@ -213,7 +227,7 @@ class _ProgressCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Your Progress',
+                          'Your overall goal Progress',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -234,7 +248,7 @@ class _ProgressCard extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             Get.to(
-                              () => const Taskpageui(),
+                              () => Taskpageui(),
                               transition: Transition.rightToLeft,
                             );
                           },
@@ -242,7 +256,7 @@ class _ProgressCard extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: const [
                               Text(
-                                'View Details ',
+                                'Complete your goals... ',
                                 style: TextStyle(
                                   fontSize: 13,
                                   color: Colors.white,

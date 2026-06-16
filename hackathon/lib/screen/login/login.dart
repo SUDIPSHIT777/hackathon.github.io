@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/state_manager.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
+import 'package:hackathon/screen/signup/authwrapper.dart';
+import 'package:hackathon/screen/signup/signup.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -292,7 +297,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Get.to(() => CreateAccountScreen());
+                              },
                               child: const Text(
                                 'Sign Up',
                                 style: TextStyle(
@@ -364,5 +371,36 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> loginUser() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
+      return;
+    }
+
+    final success = await context.read<AuthController>().login(
+      email: email,
+      password: password,
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const BottomNav()),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid Email or Password')),
+      );
+    }
   }
 }
