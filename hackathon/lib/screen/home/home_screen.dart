@@ -90,18 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 16),
                     _QuickAccessGrid(isTablet: isTablet),
                     const SizedBox(height: 28),
-
-                    // 4. Continue Learning Section
-                    const Text(
-                      'Continue Learning',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const _ContinueLearningCard(),
                   ],
                 ),
               ),
@@ -399,93 +387,4 @@ class _GridItemData {
   final IconData icon;
   final Color color;
   _GridItemData(this.title, this.icon, this.color);
-}
-
-// MARK: - Continue Learning
-class _ContinueLearningCard extends StatelessWidget {
-  const _ContinueLearningCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF082135),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
-      ),
-      child: Row(
-        children: [
-          // Graphic container placeholder
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: const Color(0xFF311B92),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.hub_outlined,
-              color: Colors.purpleAccent,
-              size: 28,
-            ),
-          ),
-          const SizedBox(width: 16),
-          // Progress & Title
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Data Science Basics\nfor Beginners',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    height: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: const LinearProgressIndicator(
-                          value: 0.6,
-                          backgroundColor: Colors.white10,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Color(0xFF00E5BC),
-                          ),
-                          minHeight: 5,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      '60%',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.white.withOpacity(0.6),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Play Button Icon
-          IconButton(
-            icon: const Icon(
-              Icons.play_circle_fill,
-              color: Colors.white,
-              size: 36,
-            ),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
-  }
 }

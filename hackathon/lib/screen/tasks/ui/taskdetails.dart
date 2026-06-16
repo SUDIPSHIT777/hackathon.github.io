@@ -64,7 +64,7 @@ class _TaskdetailsState extends State<Taskdetails> {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          "Task Details",
+          "Goal Details",
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
             color: textPrimary,
@@ -101,7 +101,7 @@ class _TaskdetailsState extends State<Taskdetails> {
                         height: 1.3,
                       ),
                       decoration: InputDecoration(
-                        hintText: "Task title...",
+                        hintText: "Goal title...",
                         hintStyle: GoogleFonts.poppins(
                           color: textSecondary.withValues(alpha: 0.5),
                         ),
@@ -235,7 +235,7 @@ class _TaskdetailsState extends State<Taskdetails> {
                               ),
                               const SizedBox(width: 12),
                               Text(
-                                "Task Status",
+                                "Goal Status",
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w500,
                                   color: textPrimary,
@@ -339,7 +339,7 @@ class _TaskdetailsState extends State<Taskdetails> {
                         Navigator.pop(context);
                       },
                       child: Text(
-                        "Update Task",
+                        "Update Goal",
                         style: GoogleFonts.poppins(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,

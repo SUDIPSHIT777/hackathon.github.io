@@ -4,6 +4,7 @@ class InternshipModel {
   final String location;
   final String duration;
   final String stipend;
+  final String applyUrl;
 
   InternshipModel({
     required this.company,
@@ -11,6 +12,7 @@ class InternshipModel {
     required this.location,
     required this.duration,
     required this.stipend,
+    required this.applyUrl,
   });
 
   factory InternshipModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class InternshipModel {
       location: json["location"] ?? "",
       duration: json["duration"] ?? "",
       stipend: json["stipend"] ?? "",
+      applyUrl: json["applyUrl"] ?? "",
     );
   }
 }

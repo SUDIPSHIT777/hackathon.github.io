@@ -25,7 +25,7 @@ void confirmDelete(BuildContext context, String taskId) {
             const SizedBox(height: 16),
 
             Text(
-              "Delete Task",
+              "Delete Goal",
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -35,7 +35,7 @@ void confirmDelete(BuildContext context, String taskId) {
             const SizedBox(height: 8),
 
             Text(
-              "This action cannot be undone.\nAre you sure you want to delete this task?",
+              "This action cannot be undone.\nAre you sure you want to delete this Goal?",
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 fontSize: 14,
