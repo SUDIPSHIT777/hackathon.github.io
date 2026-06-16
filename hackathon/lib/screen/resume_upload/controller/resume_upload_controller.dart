@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:doc_text_extractor/doc_text_extractor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:hackathon/auth/aiFeature/ai_feature.dart';
 import 'package:hackathon/widgets/custom_Snackbar.dart';
 import 'package:provider/provider.dart';
 
@@ -72,10 +73,10 @@ class ResumeUploadController extends ChangeNotifier {
     final data = await AiFeature.openRouterAI(pdfText);
     if (data != null) {
       resultController.respons = data;
-      HistoryFeature.storeInHistory(data);
-      router.goNamed('result', pathParameters: {'id': 'home'});
+      // HistoryFeature.storeInHistory(data);
+      // router.goNamed('result', pathParameters: {'id': 'home'});
     } else {
-      router.go('/home');
+      // router.go('/home');
       customSnackbar(
         context: context,
         message:

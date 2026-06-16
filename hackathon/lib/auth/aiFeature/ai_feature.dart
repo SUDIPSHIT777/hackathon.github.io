@@ -1,58 +1,13 @@
 import 'dart:developer';
 
 
-import 'package:resume_xpert/core/config/app_config.dart';
+import 'package:hackathon/config/app_config.dart';
+import 'package:hackathon/model/aiRespons_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:resume_xpert/features/model/aiRespons_model.dart';
 import 'dart:convert';
 
 
 class AiFeature {
-  static Future<void> geminiAI(String resumeText) async {
-    String prompt =
-        """
-Analyze this resume and return response in JSON format:
-
-{
-  "score": number,
-  "strengths": [],
-  "weaknesses": [],
-  "suggestions": [],
-  "missing_skills": []
-}
-Return short JSON only
-Resume:
-$resumeText
-""";
-    final message = {
-      "contents": [
-        {
-          "parts": [
-            {"text": prompt},
-          ],
-        },
-      ],
-    };
-    try {
-      var response = await http.post(
-        Uri.parse(
-          "",
-
-          /// nothing is here
-        ),
-        headers: {
-          // "x-goog-api-key": AppConfig.apikey,
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode(message),
-      );
-      // final data = jsonDecode(response.body);
-      log(response.body.toString());
-    } catch (e) {
-      log(name: "api err", e.toString());
-    }
-  }
-
   // ------------ Openrouter
   static Future<AiresponsModel?> openRouterAI(
     String resumeText,
@@ -108,7 +63,7 @@ $resumeText
       final response = await http.post(
         Uri.parse('https://openrouter.ai/api/v1/chat/completions'),
         headers: {
-          'Authorization': 'Bearer ${AppConfig.openRouterkey}',
+          'Authorization': 'Bearer ${AppConfig.apikey}',
           'Content-Type': 'application/json',
         },
 
