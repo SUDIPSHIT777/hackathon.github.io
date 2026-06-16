@@ -1,16 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lifeos/core/utils/snackbar.dart';
-import 'package:lifeos/feature/dashboard/controller/dashprovider.dart';
-import 'package:lifeos/feature/dashboard/ui/drawer.dart';
-import 'package:lifeos/feature/tasks/controller/taskprovider.dart';
-import 'package:lifeos/feature/tasks/ui/taskaddui.dart';
-import 'package:lifeos/feature/tasks/widget/completed.dart';
-import 'package:lifeos/feature/tasks/widget/deletetask.dart';
-import 'package:lifeos/feature/tasks/widget/taskpersentage.dart';
-import 'package:lifeos/model/taskmodel.dart';
+import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
+import 'package:hackathon/screen/tasks/controller/userprovider.dart';
+import 'package:hackathon/screen/tasks/model/taskmodel.dart';
+import 'package:hackathon/screen/tasks/ui/taskaddui.dart';
+import 'package:hackathon/screen/tasks/widget/completed.dart';
+import 'package:hackathon/screen/tasks/widget/snackbardesign.dart';
+import 'package:hackathon/screen/tasks/widget/taskpersentage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -117,7 +114,6 @@ class _TaskpageuiState extends State<Taskpageui>
           ),
         ],
       ),
-      drawer: Drawer(child: ProfilePage()),
 
       body: Padding(
         padding: EdgeInsets.all(8.0),
@@ -302,12 +298,8 @@ class _TaskpageuiState extends State<Taskpageui>
                                   final task = dateTasks[index];
 
                                   return GestureDetector(
-                                    onTap: () => context.pushNamed(
-                                      'taskDetails',
-                                      extra: task,
-                                    ),
-                                    onLongPress: () {
-                                      confirmDelete(context, task.id);
+                                    onTap: () {
+                                      
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.only(bottom: 10),
