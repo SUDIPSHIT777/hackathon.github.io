@@ -43,7 +43,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-
 Future<void> signUpUser() async {
   final name = _nameController.text.trim();
   final email = _emailController.text.trim();
@@ -51,53 +50,79 @@ Future<void> signUpUser() async {
   final confirmPassword =
       _confirmPasswordController.text.trim();
 
-  if (name.isEmpty ||
-      email.isEmpty ||
-      password.isEmpty ||
-      confirmPassword.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Please fill all fields'),
-      ),
-    );
+  if (name.isEmpty) {
+    showError("Please enter your full name");
+    return;
+  }
+
+  if (name.length < 3) {
+    showError("Name must be at least 3 characters");
+    return;
+  }
+
+  if (email.isEmpty) {
+    showError("Please enter your email");
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    showError("Please enter a valid email");
+    return;
+  }
+
+  if (password.isEmpty) {
+    showError("Please enter your password");
+    return;
+  }
+
+  if (password.length < 6) {
+    showError("Password must be at least 6 characters");
+    return;
+  }
+
+  if (confirmPassword.isEmpty) {
+    showError("Please confirm your password");
     return;
   }
 
   if (password != confirmPassword) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Passwords do not match'),
-      ),
-    );
+    showError("Passwords do not match");
     return;
   }
 
-  final success =
-      await context.read<AuthController>().signUp(
-        name: name,
-        email: email,
-        password: password,
+  setState(() {
+    _isLoading = true;
+  });
+
+  try {
+    final success =
+        await context.read<AuthController>().signUp(
+          name: name,
+          email: email,
+          password: password,
+        );
+
+    if (!mounted) return;
+
+    if (success) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const BottomNav(),
+        ),
+        (route) => false,
       );
-
-  if (!mounted) return;
-
-  if (success) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const BottomNav(),
-      ),
-      (route) => false,
-    );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Signup Failed'),
-      ),
-    );
+    } else {
+      showError("Unable to create account");
+    }
+  } finally {
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
-}
-  @override
+}@override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 
@@ -278,4 +303,25 @@ Future<void> signUpUser() async {
       ),
     );
   }
+  
+
+  bool isValidEmail(String email) {
+  return RegExp(
+    r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$',
+  ).hasMatch(email);
+}
+
+bool isValidPassword(String password) {
+  return password.length >= 6;
+}
+
+void showError(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.redAccent,
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}
 }

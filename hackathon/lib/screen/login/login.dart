@@ -184,48 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         child: ElevatedButton(
                           // Disable button if loading
-                          onPressed: _isLoading
-                              ? null
-                              : () async {
-                                  final email = _emailController.text.trim();
-                                  final password = _passwordController.text
-                                      .trim();
-
-                                  if (email.isNotEmpty && password.isNotEmpty) {
-                                    // 1. Set loading state to true
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-
-                                    // 2. Simulate 2-second delay (API call simulation)
-                                    await Future.delayed(
-                                      const Duration(seconds: 2),
-                                    );
-
-                                    // 3. Save SharedPreferences
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-                                    await prefs.setBool('isLoggedIn', true);
-                                    if (!context.mounted) return;
-
-                                    // 4. Navigate
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const BottomNav(),
-                                      ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Please enter both Email and Password',
-                                        ),
-                                        backgroundColor: Colors.redAccent,
-                                      ),
-                                    );
-                                  }
-                                },
+                          onPressed: _isLoading ? null : loginUser,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,
@@ -377,30 +336,73 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
+    if (email.isEmpty) {
+      showError("Please enter your email");
       return;
     }
 
-    final success = await context.read<AuthController>().login(
-      email: email,
-      password: password,
-    );
-
-    if (!mounted) return;
-
-    if (success) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const BottomNav()),
-        (route) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid Email or Password')),
-      );
+    if (!isValidEmail(email)) {
+      showError("Please enter a valid email address");
+      return;
     }
+
+    if (password.isEmpty) {
+      showError("Please enter your password");
+      return;
+    }
+
+    if (password.length < 6) {
+      showError("Password must be at least 6 characters");
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final success = await context.read<AuthController>().login(
+        email: email,
+        password: password,
+      );
+
+      if (!mounted) return;
+
+      if (success) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const BottomNav()),
+          (route) => false,
+        );
+      } else {
+        showError("Invalid email or password");
+      }
+    } catch (e) {
+      showError("Something went wrong. Please try again.");
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  bool isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  bool isValidPassword(String password) {
+    return password.length >= 6;
+  }
+
+  void showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 }
