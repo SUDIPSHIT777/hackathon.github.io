@@ -68,14 +68,89 @@ class ChatScreen extends StatelessWidget {
               Expanded(
                 child: Consumer<ChatProvider>(
                   builder: (context, chatProvider, child) {
+                    if (chatProvider.messages.isEmpty) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        padding: EdgeInsets.only(
+                          left: 30,
+                          right: 30,
+                          bottom: MediaQuery.of(context).viewInsets.bottom > 0
+                              ? 20
+                              : 0,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(18),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: const Color(0xFF151F32),
+                                  border: Border.all(
+                                    color: const Color(
+                                      0xFF00E5FF,
+                                    ).withOpacity(.2),
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.assistant_navigation,
+                                  size: 50,
+                                  color: Color(0xFF00E5FF),
+                                ),
+                              ),
+
+                              const SizedBox(height: 24),
+
+                              const Text(
+                                "Career Compass AI",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              Text(
+                                "Your personal career advisor.\nAsk anything about careers, skills, degrees, jobs, placements, and future opportunities.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  fontSize: 15,
+                                  height: 1.5,
+                                ),
+                              ),
+
+                              const SizedBox(height: 32),
+
+                              _suggestionChip(
+                                "Which degree is best after Science?",
+                              ),
+                              const SizedBox(height: 10),
+
+                              _suggestionChip(
+                                "How do I become a Software Engineer?",
+                              ),
+                              const SizedBox(height: 10),
+
+                              _suggestionChip(
+                                "Top careers in Artificial Intelligence",
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
                     return ListView.builder(
                       controller: chatProvider.scrollController,
                       padding: const EdgeInsets.all(16),
                       itemCount: chatProvider.messages.length,
                       itemBuilder: (context, index) {
-                        final ChatMessageModel msg =
-                            chatProvider.messages[index];
-                        return _buildChatBubble(msg);
+                        return _buildChatBubble(chatProvider.messages[index]);
                       },
                     );
                   },
@@ -204,6 +279,22 @@ class ChatScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _suggestionChip(String text) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withOpacity(.08)),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(color: Colors.white70, fontSize: 14),
       ),
     );
   }
