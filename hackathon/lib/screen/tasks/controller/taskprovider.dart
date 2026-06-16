@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lifeos/model/taskmodel.dart';
+import 'package:hackathon/screen/tasks/model/taskmodel.dart';
 
 class Taskprovider extends ChangeNotifier {
   // ================= Task Data Start =================
