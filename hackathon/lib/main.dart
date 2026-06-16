@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hackathon/firebase_options.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
+import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
-import 'package:hackathon/screen/signup/signup.dart';
 import 'package:hackathon/screen/tasks/controller/allupdatefunction.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/controller/userprovider.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
@@ -22,6 +24,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => DateTimeProvider()),
         ChangeNotifierProvider(create: (context) => Taskprovider()),
         ChangeNotifierProvider(create: (context) => Userprovider()),
+        ChangeNotifierProvider(create: (context) => ChatProvider()),
+
       ],
       child: const MyApp(),
     ),
