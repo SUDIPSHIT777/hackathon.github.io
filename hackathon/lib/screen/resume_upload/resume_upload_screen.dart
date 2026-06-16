@@ -18,6 +18,7 @@ class ResumeUploadScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
+        foregroundColor: Colors.white,
         centerTitle: true,
         backgroundColor: bgColor,
         elevation: 0,
