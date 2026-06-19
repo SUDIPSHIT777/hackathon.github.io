@@ -3,7 +3,7 @@
     <application
         android:label="Career Compass"
         android:name="${applicationName}"
-        android:icon="@mipmap/logo">
+        android:icon="@mipmap/applogo">
         <activity
             android:name=".MainActivity"
             android:exported="true"

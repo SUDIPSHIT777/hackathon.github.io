@@ -20,27 +20,31 @@ class ProfileScreen extends StatelessWidget {
         : "User";
 
     final userEmail = user?.email ?? "No Email";
-    const Color backgroundColor = Color(0xff051429);
-    const Color cardBackgroundColor = Color.fromARGB(255, 19, 38, 60);
 
+    // --- UI COLOR PALETTE ---
+    const Color backgroundColor = Color(0xff051429);
+    const Color cardBackgroundColor = Color(
+      0xFF0E223D,
+    ); // Slightly lighter for card depth
     const Color textWhiteColor = Colors.white;
-    const Color textMutedColor = Color(0xFF7E8F9F);
-    const Color actionIconColor = Color(0xFF5A6D82);
-    const Color borderStrokeColor = Color(0xFF142539);
-    const Color navActiveColor = Color(0xFF00D2A0);
+    const Color textMutedColor = Color(0xFF8A9EAD);
+    const Color actionIconColor = Color(0xFF6C8299);
+    const Color borderStrokeColor = Color(0xFF1E324A);
+    const Color accentColor = Color(0xFF00D2A0);
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        leading: SizedBox(),
+        leading: const SizedBox(),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
           'Profile',
           style: TextStyle(
             color: textWhiteColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
           ),
         ),
         centerTitle: true,
@@ -61,115 +65,164 @@ class ProfileScreen extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         padding: EdgeInsets.symmetric(
                           horizontal: horizontalPadding,
+                          vertical: 10,
                         ),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 20),
 
-                            // --- USER AVATAR WITH INTEGRATED BADGES ---
+                            // --- PREMIUM USER AVATAR WITH BADGE ---
                             Center(
                               child: Stack(
-                                alignment: Alignment.bottomRight,
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.all(4),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: const Color(0xFF1C324E),
-                                        width: 2,
+                                        color: accentColor.withOpacity(0.4),
+                                        width: 2.5,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: accentColor.withOpacity(0.1),
+                                          blurRadius: 16,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 50,
+                                      backgroundColor: cardBackgroundColor,
+                                      child: Icon(
+                                        Icons.person_rounded,
+                                        size: 54,
+                                        color: textMutedColor.withOpacity(0.8),
                                       ),
                                     ),
-                                    child: const CircleAvatar(
-                                      radius: 46,
-                                      child: Icon(Icons.person, size: 50),
-                                      // backgroundImage: NetworkImage(
-                                      //   'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200',
-                                      // ),
-                                    ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: const BoxDecoration(
-                                      color: cardBackgroundColor,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.camera_alt_outlined,
-                                      color: textMutedColor,
-                                      size: 16,
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(7),
+                                      decoration: BoxDecoration(
+                                        color: accentColor,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: backgroundColor,
+                                          width: 2.5,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.3,
+                                            ),
+                                            blurRadius: 6,
+                                            offset: const Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      // child: const Icon(
+                                      //   Icons.camera_alt_rounded,
+                                      //   color: backgroundColor,
+                                      //   size: 15,
+                                      // ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 20),
 
-                            // --- USER META DATA DESCRIPTION NAMES ---
+                            // --- USER META DATA ---
                             Text(
                               userName,
-                              style: TextStyle(
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
                                 color: textWhiteColor,
-                                fontSize: 20,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
                               ),
                             ),
                             const SizedBox(height: 6),
                             Text(
                               userEmail,
-                              style: TextStyle(
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
                                 color: textMutedColor,
                                 fontSize: 14,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
+                            const SizedBox(height: 32),
 
-                            // const SizedBox(height: 4),
-                            // // const Text(
-                            // //   'Tech University',
-                            // //   style: TextStyle(
-                            // //     color: textMutedColor,
-                            // //     fontSize: 13,
-                            // //   ),
-                            // // ),
-                            // // const SizedBox(height: 28),
-
-                            // // --- STATS METRIC GRID SYSTEM ---
-                            // const SizedBox(height: 24),
-
-                            // --- DASHBOARD ACTIONS MENU LIST ---
-                            _buildMenuRow(
-                              Icons.assignment_turned_in_outlined,
-                              'Privecy policy',
-                              actionIconColor,
-                              textWhiteColor,
-                              onTap: () {
-                                Get.to(() => PrivacyPolicyScreen());
-                              },
+                            // --- SETTINGS & INFO MENU CARD ---
+                            Container(
+                              decoration: BoxDecoration(
+                                color: cardBackgroundColor,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: borderStrokeColor,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  _buildMenuRow(
+                                    Icons.privacy_tip_outlined,
+                                    'Privacy Policy',
+                                    actionIconColor,
+                                    textWhiteColor,
+                                    onTap: () {
+                                      Get.to(() => PrivacyPolicyScreen());
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                    ),
+                                    child: Divider(
+                                      color: borderStrokeColor.withOpacity(0.6),
+                                      height: 1,
+                                    ),
+                                  ),
+                                  _buildMenuRow(
+                                    Icons.info_outline_rounded,
+                                    'Version Info',
+                                    actionIconColor,
+                                    textWhiteColor,
+                                    subtitle: 'V.0.1',
+                                  ),
+                                ],
+                              ),
                             ),
-                            _buildMenuRow(
-                              Icons.settings_outlined,
-                              'Version\n V.0.1',
-                              actionIconColor,
-                              textWhiteColor,
-                            ),
+                            const SizedBox(height: 20),
 
-                            // Divider before logout
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Divider(color: borderStrokeColor),
-                            ),
-
-                            // --- LOGOUT BUTTON ---
-                            _buildMenuRow(
-                              Icons.logout_rounded,
-                              'Logout',
-                              const Color(0xFFE63946), // Red distinct color
-                              const Color(0xFFE63946),
-                              onTap: () async {
-                                await context.read<AuthController>().logout();
-
-                                Get.offAll(() => const LoginScreen());
-                              },
+                            // --- LOGOUT BUTTON CARD ---
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(
+                                  0xFF2A1418,
+                                ), // Subtle red tint background
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: const Color(0xFF5C2429),
+                                  width: 1,
+                                ),
+                              ),
+                              child: _buildMenuRow(
+                                Icons.logout_rounded,
+                                'Logout Account',
+                                const Color(0xFFE63946),
+                                const Color(0xFFE63946),
+                                isDestructive: true,
+                                onTap: () async {
+                                  await context.read<AuthController>().logout();
+                                  Get.offAll(() => const LoginScreen());
+                                },
+                              ),
                             ),
                             const SizedBox(height: 20),
                           ],
@@ -186,41 +239,73 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildVerticalDivider(Color dividerColor) {
-    return Container(width: 1, height: 32, color: dividerColor);
-  }
-
-  // --- UPDATED: Added an optional onTap parameter ---
+  // --- REFACTORED MENU ROW ---
   Widget _buildMenuRow(
     IconData icon,
     String title,
     Color leadingColor,
     Color textColor, {
+    String? subtitle,
     VoidCallback? onTap,
+    bool isDestructive = false,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        leading: Icon(icon, color: leadingColor, size: 22),
-        title: Text(
-          title,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-          ),
+    return InkWell(
+      onTap: onTap ?? () {},
+      borderRadius: BorderRadius.circular(16),
+      splashColor: isDestructive
+          ? Color.fromARGB(20, 230, 57, 70)
+          : const Color.fromARGB(26, 255, 255, 255),
+      highlightColor: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDestructive
+                    ? const Color(0xFF3D1A1F)
+                    : const Color(0xFF162D4A),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: leadingColor, size: 22),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        color: Color(0xFF6C8299),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: isDestructive
+                  ? const Color(0xFF8E3D43)
+                  : const Color(0xFF4A5A6A),
+              size: 22,
+            ),
+          ],
         ),
-        trailing: const Icon(
-          Icons.chevron_right_rounded,
-          color: Color(0xFF4A5A6A),
-          size: 20,
-        ),
-        onTap:
-            onTap ??
-            () {
-              // Default logic for other buttons if none is provided
-            },
       ),
     );
   }

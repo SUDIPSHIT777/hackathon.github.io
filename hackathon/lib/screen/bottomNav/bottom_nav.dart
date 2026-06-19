@@ -47,7 +47,7 @@ class _BottomNavState extends State<BottomNav> {
         ],
       ),
       bottomNavigationBar: SlidingClippedNavBar.colorful(
-        backgroundColor: Color(0xff051429),
+        backgroundColor: Color.fromARGB(255, 4, 15, 30),
         onButtonPressed: onButtonPressed,
         iconSize: 30,
         // activeColor: const Color(0xFF01579B),

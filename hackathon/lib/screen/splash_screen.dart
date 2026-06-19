@@ -74,24 +74,17 @@ class _CareerCompassPageState extends State<CareerCompassPage> {
                                   ),
                                 ),
                               ),
+                              LinearProgressIndicator(
+                                minHeight: 10,
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color.fromARGB(255, 9, 36, 57),
+                              ),
+                              SizedBox(height: 10),
                               _PrimaryButton(
                                 text: 'App is loading...',
                                 onTap: () {},
                               ),
                               const SizedBox(height: 24),
-                              GestureDetector(
-                                onTap: () {},
-                                child: const Text(
-                                  'Explore as Guest',
-                                  style: TextStyle(
-                                    color: Color(0xFF00E6D4),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 12),
                             ],
                           ),
                         ),

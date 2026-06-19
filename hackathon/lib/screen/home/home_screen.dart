@@ -319,7 +319,11 @@ class _QuickAccessGrid extends StatelessWidget {
         Icons.explore_outlined,
         const Color(0xFF2196F3),
       ),
-      _GridItemData('Internship\nFinder', Icons.work, const Color(0xFF2196F3)),
+      _GridItemData(
+        'Internship\nFinder',
+        Icons.work,
+        const Color.fromARGB(255, 243, 54, 33),
+      ),
     ];
 
     return GridView.builder(
