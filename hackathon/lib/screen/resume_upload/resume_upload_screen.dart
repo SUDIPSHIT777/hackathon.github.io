@@ -39,9 +39,6 @@ class ResumeUploadScreen extends StatelessWidget {
           final double horizontalPadding = constraints.maxWidth > 700
               ? 48.0
               : 20.0;
-          final int crossAxisCount = constraints.maxWidth > 900
-              ? 3
-              : (constraints.maxWidth > 600 ? 2 : 1);
 
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),

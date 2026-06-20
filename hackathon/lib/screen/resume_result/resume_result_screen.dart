@@ -20,7 +20,6 @@ class ResumeResultScreen extends StatefulWidget {
 
 class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
     with SingleTickerProviderStateMixin {
-  int _activeTabIdx = 0;
 
   // Animated score value
   late AnimationController _scoreAnimController;
@@ -35,7 +34,6 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
   static const Color colorRedAccent = Color(0xFFEF4444);
   static const Color colorBlueAccent = Color(0xFF3B82F6);
   // static const Color colorTabBg = Color(0xFF0D1724);
-  static const Color colorTabActiveBg = Color(0xFF1E2D4A);
 
   @override
   void initState() {
