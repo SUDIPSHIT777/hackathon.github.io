@@ -42,37 +42,37 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyCdQlwQ1Q8iUP7ttpgaJ7fkV8yt5-aZEd8',
-    appId: '1:72672407667:web:b872204ead0cc514dfba06',
+    appId: '1:72672407667:web:00dbc032ce71d8bddfba06',
     messagingSenderId: '72672407667',
     projectId: 'hackathon-92e0f',
     authDomain: 'hackathon-92e0f.firebaseapp.com',
     storageBucket: 'hackathon-92e0f.firebasestorage.app',
-    measurementId: 'G-MGG071VZNE',
+    measurementId: 'G-8LZ68C5F8V',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBusmzEYVdlFjsLFFeIKBFr0aK6cHsjsg8',
-    appId: '1:72672407667:android:9f62525e071df411dfba06',
+    appId: '1:72672407667:android:92584775453e49c7dfba06',
     messagingSenderId: '72672407667',
     projectId: 'hackathon-92e0f',
     storageBucket: 'hackathon-92e0f.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC3FMZO7F9gmqHZwx59qDV8PnLAAsBB-kE',
     appId: '1:72672407667:ios:468f7d4c4df02dafdfba06',
     messagingSenderId: '72672407667',
     projectId: 'hackathon-92e0f',
     storageBucket: 'hackathon-92e0f.firebasestorage.app',
+    iosClientId: '72672407667-2sqs41oqmijpfn814gsfss1cl3du6crb.apps.googleusercontent.com',
     iosBundleId: 'com.example.hackathon',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyC3FMZO7F9gmqHZwx59qDV8PnLAAsBB-kE',
     appId: '1:72672407667:ios:468f7d4c4df02dafdfba06',
     messagingSenderId: '72672407667',
     projectId: 'hackathon-92e0f',
     storageBucket: 'hackathon-92e0f.firebasestorage.app',
+    iosClientId: '72672407667-2sqs41oqmijpfn814gsfss1cl3du6crb.apps.googleusercontent.com',
     iosBundleId: 'com.example.hackathon',
   );
 

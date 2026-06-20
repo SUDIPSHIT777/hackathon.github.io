@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:72672407667:android:9f62525e071df411dfba06",
+        "mobilesdk_app_id": "1:72672407667:android:92584775453e49c7dfba06",
         "android_client_info": {
-          "package_name": "com.example.hackathon"
+          "package_name": "com.careercompass.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "72672407667-blhjabqhrkql5kl4jvtp4e2vcugnqohg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBusmzEYVdlFjsLFFeIKBFr0aK6cHsjsg8"
@@ -20,7 +25,55 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72672407667-blhjabqhrkql5kl4jvtp4e2vcugnqohg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "72672407667-2sqs41oqmijpfn814gsfss1cl3du6crb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hackathon"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72672407667:android:9f62525e071df411dfba06",
+        "android_client_info": {
+          "package_name": "com.example.hackathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72672407667-blhjabqhrkql5kl4jvtp4e2vcugnqohg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBusmzEYVdlFjsLFFeIKBFr0aK6cHsjsg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72672407667-blhjabqhrkql5kl4jvtp4e2vcugnqohg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "72672407667-2sqs41oqmijpfn814gsfss1cl3du6crb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hackathon"
+              }
+            }
+          ]
         }
       }
     }
