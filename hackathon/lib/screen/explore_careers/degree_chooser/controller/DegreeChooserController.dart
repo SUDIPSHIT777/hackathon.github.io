@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon/auth/degree_AI.dart';
 import 'package:hackathon/model/degreeModel.dart';
-import 'package:provider/provider.dart';
 class DegreeChooserController
     extends ChangeNotifier {
 

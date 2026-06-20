@@ -99,7 +99,6 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
     // Shared space-dark theme color canvas configurations
     const Color colorBg = Color(0xff051429);
     const Color colorCardBg = Color.fromARGB(255, 19, 38, 60);
-    const Color colorSearchBg = Color(0xFF0D1829);
     const Color colorTextWhite = Colors.white;
     const Color colorTextMuted = Color(0xFF6B7A90);
     const Color colorBorderDefault = Color(0xFF13233A);
@@ -107,6 +106,7 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
     return Scaffold(
       backgroundColor: colorBg,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -507,53 +507,4 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
     const Color(0xFF0C251F),
   ];
   // Linear custom tracker element mirroring the 4-step circle architecture sequence
-  Widget _buildStepperTracker(Color baseBorder) {
-    return Row(
-      children: List.generate(4, (index) {
-        final bool isPassed = index < 1;
-        final bool isCurrent = index == 1;
-
-        return Row(
-          children: [
-            Container(
-              width: 18,
-              height: 18,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isPassed || isCurrent
-                    ? const Color(0xFF00D2A0)
-                    : Colors.transparent,
-                border: Border.all(
-                  color: isPassed || isCurrent
-                      ? const Color(0xFF00D2A0)
-                      : baseBorder,
-                  width: 1.5,
-                ),
-              ),
-              child: Center(
-                child: isPassed
-                    ? const Icon(Icons.check, color: Colors.white, size: 10)
-                    : Text(
-                        '${index + 1}',
-                        style: TextStyle(
-                          color: isCurrent
-                              ? Colors.white
-                              : const Color(0xFF4E6178),
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-              ),
-            ),
-            if (index != 3)
-              Container(
-                width: 14,
-                height: 1.5,
-                color: index < 1 ? const Color(0xFF00D2A0) : baseBorder,
-              ),
-          ],
-        );
-      }),
-    );
-  }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hackathon/auth/career_path_AI.dart';
+import 'package:hackathon/auth/career_path_ai.dart';
 import 'package:hackathon/model/career_path_model.dart';
 
 class CareerPathController

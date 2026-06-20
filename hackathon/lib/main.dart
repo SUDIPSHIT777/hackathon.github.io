@@ -1,15 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hackathon/config/app_config.dart';
 import 'package:hackathon/firebase_options.dart';
-import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/chatboat/controller/chatcontroller.dart';
 import 'package:hackathon/screen/explore_careers/degree_chooser/controller/DegreeChooserController.dart';
 import 'package:hackathon/screen/explore_careers/path_chooser/controller/path_chooser_controller.dart';
-import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
 import 'package:hackathon/screen/signup/authwrapper.dart';

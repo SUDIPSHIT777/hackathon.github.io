@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/login/login.dart';
-import 'package:hackathon/screen/signup/authwrapper.dart';
 
 class CareerCompassPage extends StatefulWidget {
   const CareerCompassPage({super.key});
@@ -291,13 +290,13 @@ class _CompassIllustration extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 280, maxHeight: 280),
       child: AspectRatio(
         aspectRatio: 1,
-        child: CustomPaint(painter: _MainCompassPainter()),
+        child: CustomPaint(painter: MainCompassPainter()),
       ),
     );
   }
 }
 
-class _MiniCompass extends StatelessWidget {
+ class _MiniCompass extends StatelessWidget {
   const _MiniCompass();
 
   @override
@@ -310,7 +309,7 @@ class _MiniCompass extends StatelessWidget {
   }
 }
 
-class _MainCompassPainter extends CustomPainter {
+class MainCompassPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);

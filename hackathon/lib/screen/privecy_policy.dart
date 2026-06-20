@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
@@ -15,6 +16,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -27,14 +29,16 @@ class PrivacyPolicyScreen extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Privacy Policy',
-          style: TextStyle(
-            color: textWhiteColor,
-            fontSize: 18,
+          style: GoogleFonts.poppins(
+            color: Colors.white,
             fontWeight: FontWeight.bold,
+            fontSize: 18,
+            letterSpacing: 1.2,
           ),
         ),
+       
         centerTitle: true,
       ),
       body: SafeArea(

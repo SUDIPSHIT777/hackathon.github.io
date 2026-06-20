@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hackathon/screen/signup/authwrapper.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -24,7 +22,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       TextEditingController();
 
   static const Color backgroundColor = Color(0xFF060E17);
-  static const Color cardColor = Color(0xFF0F1A24);
   static const Color inputFillColor = Color(0xFF132230);
   static const Color textPrimary = Colors.white;
   static const Color textSecondary = Color(0xFF7E92A2);

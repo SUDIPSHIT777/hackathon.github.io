@@ -4,11 +4,11 @@ import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/screen/chatboat/ui/chatboatui.dart';
 import 'package:hackathon/screen/internship/ui/internship.dart';
-import 'package:hackathon/screen/resume_upload/resume_upload_screen.dart';
 import 'package:hackathon/screen/explore_careers/stream_chooser/exploer_careers_screen.dart';
 import 'package:hackathon/screen/tasks/controller/taskprovider.dart';
 import 'package:hackathon/screen/tasks/model/taskmodel.dart';
 import 'package:hackathon/screen/tasks/ui/taskpageui.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,35 +25,65 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: const Color(0xff051429),
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         centerTitle: true,
         backgroundColor: const Color(0xff051429),
-        leading: const CircleAvatar(
-          radius: 20,
-          backgroundColor: Color(0xff051429),
-          // Replace with your NetworkImage asset
-          backgroundImage: AssetImage('assets/appLogoOnly.png'),
+        leading: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 36,
+            height: 36,
+            child: CustomPaint(painter: _AppBarCompassPainter()),
+          ),
         ),
-        title: Text(
-          "CAREER COMPASS",
-          style: GoogleFonts.orbitron(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1,
-            fontSize: 18,
+        title: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: GoogleFonts.orbitron(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+              fontSize: 18,
+            ),
+            children: [
+              const TextSpan(text: 'CAREER '),
+              const TextSpan(
+                text: 'C',
+                style: TextStyle(color: Color(0xFF00E6D4)),
+              ),
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CustomPaint(painter: _AppBarCompassPainter()),
+                  ),
+                ),
+              ),
+              const TextSpan(
+                text: 'MPASS',
+                style: TextStyle(color: Color(0xFF00E6D4)),
+              ),
+            ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
+      floatingActionButton: InkWell(
+        onTap: () {
           Get.to(() => ChatScreen());
         },
-        backgroundColor: const Color(
-          0xFF00E5FF,
-        ), // Accent Cyan matching your UI
-        child: const Icon(
-          Icons.psychology_outlined, // Clean AI/Mind icon
-          color: Color(0xff051429), // Dark contrast icon color
-          size: 28,
+        child: Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            // borderRadius: BorderRadius.circular(100),
+            // color: const Color.fromARGB(255, 3, 99, 163),
+          ),
+          height: 100,
+          width: 70,
+          child: Lottie.asset("assets/Tectarus Pulse.json", fit: BoxFit.cover),
         ),
       ),
       body: LayoutBuilder(
@@ -252,20 +282,15 @@ class _ProgressCard extends StatelessWidget {
                                 ),
                               ),
                               Icon(
-                                Icons.arrow_forward,
-                                size: 14,
-                                color: Colors.white,
+                                Icons.arrow_forward_ios,
+                                color: Colors.white24,
+                                size: 16,
                               ),
                             ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.white24,
-                    size: 16,
                   ),
                 ],
               ),
@@ -277,6 +302,143 @@ class _ProgressCard extends StatelessWidget {
   }
 }
 
+class _AppBarCompassPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.shortestSide / 2;
+
+    // --- GLOW ---
+    final glow = Paint()
+      ..color = const Color(0xFF00E6D4).withOpacity(0.08)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+    canvas.drawCircle(center, radius * 0.8, glow);
+
+    // --- RINGS ---
+    final brightRing = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2
+      ..color = const Color(0xFF00E6D4).withOpacity(0.85);
+
+    final thinRing = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.5
+      ..color = const Color(0xFF00E6D4).withOpacity(0.2);
+
+    canvas.drawCircle(center, radius * 0.80, brightRing);
+    canvas.drawCircle(center, radius * 0.86, thinRing);
+    canvas.drawCircle(center, radius * 0.62, thinRing);
+    canvas.drawCircle(center, radius * 0.42, thinRing);
+
+    // --- AXIS LINES ---
+    final axisPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.6
+      ..color = const Color(0xFF00E6D4).withOpacity(0.35);
+
+    final minD = radius * 0.15;
+    final maxD = radius * 0.78;
+
+    canvas.drawLine(
+      Offset(center.dx, center.dy - maxD),
+      Offset(center.dx, center.dy - minD),
+      axisPaint,
+    );
+    canvas.drawLine(
+      Offset(center.dx, center.dy + minD),
+      Offset(center.dx, center.dy + maxD),
+      axisPaint,
+    );
+    canvas.drawLine(
+      Offset(center.dx - maxD, center.dy),
+      Offset(center.dx - minD, center.dy),
+      axisPaint,
+    );
+    canvas.drawLine(
+      Offset(center.dx + minD, center.dy),
+      Offset(center.dx + maxD, center.dy),
+      axisPaint,
+    );
+
+    // --- DIAGONAL LINES ---
+    final diagPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.4
+      ..color = const Color(0xFF00E6D4).withOpacity(0.15);
+
+    for (var angle in [45, 135, 225, 315]) {
+      canvas.save();
+      canvas.translate(center.dx, center.dy);
+      canvas.rotate(angle * 3.1415926535 / 180);
+      canvas.drawLine(Offset(0, -maxD * 0.9), Offset(0, -minD), diagPaint);
+      canvas.restore();
+    }
+
+    // --- MAIN NEEDLES (4 cardinal) ---
+    final mainLen = radius * 0.68;
+    final mainW = radius * 0.10;
+    _drawNeedle(canvas, center, mainLen, mainW, 0, const Color(0xFF00E6D4));
+    _drawNeedle(canvas, center, mainLen, mainW, 90, const Color(0xFF00DEC9));
+    _drawNeedle(canvas, center, mainLen, mainW, 180, const Color(0xFF00BFAF));
+    _drawNeedle(canvas, center, mainLen, mainW, 270, const Color(0xFF00DEC9));
+
+    // --- SUB NEEDLES (4 diagonal) ---
+    final subLen = radius * 0.38;
+    final subW = radius * 0.06;
+    _drawNeedle(canvas, center, subLen, subW, 45, const Color(0xFF00A194));
+    _drawNeedle(canvas, center, subLen, subW, 135, const Color(0xFF00A194));
+    _drawNeedle(canvas, center, subLen, subW, 225, const Color(0xFF00A194));
+    _drawNeedle(canvas, center, subLen, subW, 315, const Color(0xFF00A194));
+
+    // --- CENTER ---
+    canvas.drawCircle(
+      center,
+      radius * 0.08,
+      Paint()..color = const Color(0xFF01141C),
+    );
+
+    final centerGlow = Paint()
+      ..color = const Color(0xFF8BFFE3)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawCircle(center, radius * 0.045, centerGlow);
+    canvas.drawCircle(center, radius * 0.02, Paint()..color = Colors.white);
+  }
+
+  void _drawNeedle(
+    Canvas canvas,
+    Offset center,
+    double length,
+    double baseWidth,
+    double angleDeg,
+    Color color,
+  ) {
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(angleDeg * 3.1415926535 / 180);
+
+    canvas.drawPath(
+      Path()
+        ..moveTo(0, 0)
+        ..lineTo(-baseWidth, 0)
+        ..lineTo(0, -length)
+        ..close(),
+      Paint()..color = color,
+    );
+    canvas.drawPath(
+      Path()
+        ..moveTo(0, 0)
+        ..lineTo(baseWidth, 0)
+        ..lineTo(0, -length)
+        ..close(),
+      Paint()..color = color.withOpacity(0.45),
+    );
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
 // MARK: - Quick Access Grid
 class _QuickAccessGrid extends StatelessWidget {
   final bool isTablet;
@@ -284,16 +446,11 @@ class _QuickAccessGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Dynamic item styling parameters
     final List<VoidCallback> fun = [
-      () => Get.to(
-        () => const ResumeUploadScreen(),
-        transition: Transition.rightToLeft,
-      ), // resume analysis
       () => Get.to(
         () => const Taskpageui(),
         transition: Transition.rightToLeft,
-      ), // skill gap assment
+      ), // goal tracker
       () => Get.to(
         () => const ChooseStreamScreen(),
         transition: Transition.rightToLeft,
@@ -301,56 +458,50 @@ class _QuickAccessGrid extends StatelessWidget {
       () => Get.to(
         () => const InternshipDashboard(),
         transition: Transition.rightToLeft,
-      ), // intership finder
+      ), // internship finder
     ];
+
     final items = [
       _GridItemData(
-        'Resume\nAnalysis',
-        Icons.assignment_outlined,
-        const Color(0xFF00E5BC),
-      ),
-      _GridItemData(
-        'Skill Gap\nAssessment',
+        'Goal tracker',
+        "Set career goals, track progress, and stay on the path to success.",
         Icons.settings_outlined,
         const Color(0xFFFF9F43),
       ),
       _GridItemData(
-        'Explore\nCareers',
+        'Explore Careers',
+        "Explore opportunities and find the right future for you.",
         Icons.explore_outlined,
         const Color(0xFF2196F3),
       ),
       _GridItemData(
-        'Internship\nFinder',
+        'Internship Finder',
+        "Find internships that help you gain real-world experience and grow your skills.",
         Icons.work,
         const Color.fromARGB(255, 243, 54, 33),
       ),
     ];
 
-    return GridView.builder(
+    return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      // Adjust column count dynamically for responsiveness
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: isTablet ? 4 : 2,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
-        childAspectRatio: isTablet ? 1.2 : 1.35,
-      ),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
         return InkWell(
           onTap: fun[index],
           child: Container(
+            margin: const EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: const Color(0xFF082135),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.white.withOpacity(0.05)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Row(
+              // Using spacing property if you are on latest Flutter,
+              // but standard is to handle spacing via padding/SizedBoxes.
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Icon with glowing shadow effect
                 Container(
@@ -368,14 +519,47 @@ class _QuickAccessGrid extends StatelessWidget {
                   ),
                   child: Icon(item.icon, color: item.color, size: 22),
                 ),
-                Text(
-                  item.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    height: 1.2,
+                const SizedBox(
+                  width: 16,
+                ), // Replaced 'spacing: 20' layout if standard Row
+                // ====== FIXED OVERFLOW HERE ======
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        item.title,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          height: 2,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        item.subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis, // Clean fallback wrap
+                        style: const TextStyle(
+                          fontSize:
+                              12, // Reduced slightly for better visual hierarchy
+                          fontWeight: FontWeight.w400,
+                          color: Colors.blueGrey,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+
+                // =================================
+                const SizedBox(width: 12),
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.white54,
+                  size: 16,
                 ),
               ],
             ),
@@ -390,5 +574,6 @@ class _GridItemData {
   final String title;
   final IconData icon;
   final Color color;
-  _GridItemData(this.title, this.icon, this.color);
+  final String subtitle;
+  _GridItemData(this.title, this.subtitle, this.icon, this.color);
 }

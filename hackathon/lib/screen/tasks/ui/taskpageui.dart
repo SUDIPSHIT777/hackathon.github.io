@@ -44,7 +44,17 @@ class _TaskpageuiState extends State<Taskpageui>
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        title: Text("Goals", style: GoogleFonts.poppins()),
+        surfaceTintColor: Colors.transparent,
+        title: Text(
+          "GOALS",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            letterSpacing: 1.2,
+          ),
+        ),
+
         centerTitle: true,
       ),
       body: SafeArea(

@@ -2,11 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hackathon/screen/about/about_screen.dart';
 import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/privecy_policy.dart';
 import 'package:hackathon/screen/signup/authwrapper.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -35,18 +36,20 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         leading: const SizedBox(),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            color: textWhiteColor,
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.5,
+        title: Text(
+          "PROFILE",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            letterSpacing: 1.2,
           ),
         ),
+
         centerTitle: true,
       ),
       body: SafeArea(
@@ -177,6 +180,25 @@ class ProfileScreen extends StatelessWidget {
                                     textWhiteColor,
                                     onTap: () {
                                       Get.to(() => PrivacyPolicyScreen());
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                    ),
+                                    child: Divider(
+                                      color: borderStrokeColor.withOpacity(0.6),
+                                      height: 1,
+                                    ),
+                                  ),
+                                  _buildMenuRow(
+                                    Icons.settings_applications,
+                                    'About App',
+                                    actionIconColor,
+                                    textWhiteColor,
+                                    subtitle: 'About the',
+                                    onTap: () {
+                                      Get.to(() => AboutAppScreen());
                                     },
                                   ),
                                   Padding(

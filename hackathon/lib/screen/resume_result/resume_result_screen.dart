@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/model/aiRespons_model.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/resume_result/controller/resume_result_controller.dart';
@@ -77,6 +78,7 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
         return Scaffold(
           backgroundColor: colorBg,
           appBar: AppBar(
+            surfaceTintColor: Colors.transparent,
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
@@ -84,12 +86,13 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
               onPressed: () =>
                   Get.offAll(() => BottomNav(), transition: Transition.fade),
             ),
-            title: const Text(
-              'Resume Analysis',
-              style: TextStyle(
-                color: colorTextWhite,
-                fontSize: 18,
+            title: Text(
+              "RESUME RESULT",
+              style: GoogleFonts.poppins(
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
+                fontSize: 18,
+                letterSpacing: 1.2,
               ),
             ),
             centerTitle: true,
@@ -261,28 +264,28 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
     );
   }
 
-  // ── Tab segment ─────────────────────────────────────────────────────────────
-  Widget _buildSubTab(int index, String label) {
-    final bool isSelected = _activeTabIdx == index;
-    return GestureDetector(
-      onTap: () => setState(() => _activeTabIdx = index),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? colorTabActiveBg : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? colorTextWhite : colorTextMuted,
-            fontSize: 13,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
+  // // ── Tab segment ─────────────────────────────────────────────────────────────
+  // Widget _buildSubTab(int index, String label) {
+  //   final bool isSelected = _activeTabIdx == index;
+  //   return GestureDetector(
+  //     onTap: () => setState(() => _activeTabIdx = index),
+  //     child: Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  //       decoration: BoxDecoration(
+  //         color: isSelected ? colorTabActiveBg : Colors.transparent,
+  //         borderRadius: BorderRadius.circular(10),
+  //       ),
+  //       child: Text(
+  //         label,
+  //         style: TextStyle(
+  //           color: isSelected ? colorTextWhite : colorTextMuted,
+  //           fontSize: 13,
+  //           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // ── Section header ───────────────────────────────────────────────────────────
   Widget _buildSectionHeader(String title, Color barColor) {

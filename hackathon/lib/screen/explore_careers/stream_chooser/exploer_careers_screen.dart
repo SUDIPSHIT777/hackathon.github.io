@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
-import 'package:hackathon/screen/explore_careers/degree_chooser/controller/DegreeChooserController.dart';
 import 'package:hackathon/screen/explore_careers/degree_chooser/degree_chooser_screen.dart';
-import 'package:provider/provider.dart';
 
 class ChooseStreamScreen extends StatefulWidget {
   const ChooseStreamScreen({super.key});
@@ -76,13 +74,13 @@ class _ChooseStreamScreenState extends State<ChooseStreamScreen> {
     // const Color colorSearchBg = Color(0xFF0D1829);
     const Color colorTextWhite = Colors.white;
     const Color colorTextMuted = Color(0xFF6B7A90);
-    const Color colorActiveStep = Color(0xFF3B82F6);
 
     final Color colorBorderDefault = const Color(0xFF13233A);
 
     return Scaffold(
       backgroundColor: colorBg,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         foregroundColor: Colors.white,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -373,39 +371,4 @@ class _ChooseStreamScreenState extends State<ChooseStreamScreen> {
   }
 
   // Helper code to build the inline custom progress stepper circles
-  Widget _buildStepperTracker(Color activeColor, Color baseBorder) {
-    return Row(
-      children: List.generate(4, (index) {
-        final bool isCurrent = index == 0;
-        return Row(
-          children: [
-            Container(
-              width: 18,
-              height: 18,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isCurrent ? activeColor : Colors.transparent,
-                border: Border.all(
-                  color: isCurrent ? activeColor : baseBorder,
-                  width: 1.5,
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  '${index + 1}',
-                  style: TextStyle(
-                    color: isCurrent ? Colors.white : const Color(0xFF4E6178),
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            if (index != 3)
-              Container(width: 14, height: 1.5, color: baseBorder),
-          ],
-        );
-      }),
-    );
-  }
 }

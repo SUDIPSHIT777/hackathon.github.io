@@ -60,15 +60,17 @@ class _TaskdetailsState extends State<Taskdetails> {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        backgroundColor: bgColor,
         surfaceTintColor: Colors.transparent,
+        backgroundColor: bgColor,
         elevation: 0,
+
         title: Text(
-          "Goal Details",
+          "GOAL DETAILS",
           style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600,
-            color: textPrimary,
-            letterSpacing: 0.5,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            letterSpacing: 1.2,
           ),
         ),
         centerTitle: true,

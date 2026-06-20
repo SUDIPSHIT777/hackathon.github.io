@@ -43,6 +43,7 @@ class _PathChooserScreenState extends State<PathChooserScreen> {
     return Scaffold(
       backgroundColor: colorBg,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -336,31 +337,7 @@ class _PathChooserScreenState extends State<PathChooserScreen> {
       ),
     );
   }
-
   // Completed Step design engine
-  Widget _buildCompletedStepper() {
-    return Row(
-      children: List.generate(4, (index) {
-        return Row(
-          children: [
-            Container(
-              width: 18,
-              height: 18,
-              decoration: const BoxDecoration(
-                color: Color(0xFF00D2A0),
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Icon(Icons.check, color: Colors.white, size: 10),
-              ),
-            ),
-            if (index != 3)
-              Container(width: 14, height: 1.5, color: const Color(0xFF00D2A0)),
-          ],
-        );
-      }),
-    );
-  }
 
   // Dynamic Horizontal selection metadata tracker helper
   Widget _buildSummaryBadge(

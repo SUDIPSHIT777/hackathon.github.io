@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:hackathon/config/app_config.dart';
 import 'package:hackathon/model/career_path_model.dart';
-import 'package:hackathon/model/degreeModel.dart';
 import 'package:http/http.dart' as http;
 Future<CareerPathModel?> getCareerPathAI(
   String stream,

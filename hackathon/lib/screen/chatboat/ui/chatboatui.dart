@@ -22,21 +22,18 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        backgroundColor: bgColor,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Color.fromARGB(255, 14, 24, 47),
         elevation: 0,
+        titleSpacing: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
           children: [
-            const CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(
-                'https://ui-avatars.com/api/?name=Compass&background=00E5FF&color=fff',
-              ),
-            ),
-            const SizedBox(width: 12),
+            const CircleAvatar(radius: 16, child: Text("CC")),
+            const SizedBox(width: 5),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,6 +69,7 @@ class ChatScreen extends StatelessWidget {
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 250),
                         padding: EdgeInsets.only(
+                          top: 20,
                           left: 30,
                           right: 30,
                           bottom: MediaQuery.of(context).viewInsets.bottom > 0
@@ -222,62 +220,92 @@ class ChatScreen extends StatelessWidget {
   }
 
   Widget _buildInputArea(BuildContext context, ChatProvider provider) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05))),
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: surfaceColor,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withOpacity(0.1)),
-                ),
-                child: TextField(
-                  controller: provider.textController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: "Type a message...",
-                    hintStyle: TextStyle(color: Colors.grey[500]),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 14,
+    return Consumer<ChatProvider>(
+      builder: (context, chatProvider, child) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: bgColor,
+          border: Border(
+            top: BorderSide(color: Colors.white.withOpacity(0.05)),
+          ),
+        ),
+        child: SafeArea(
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: surfaceColor,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: chatProvider.isLoading
+                          ? Colors.white.withOpacity(0.04)
+                          : Colors.white.withOpacity(0.1),
                     ),
                   ),
-                  onSubmitted: (_) => provider.sendMessage(),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            GestureDetector(
-              onTap: provider.sendMessage,
-              child: Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: primaryGradient,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF00E5FF).withOpacity(0.4),
-                      blurRadius: 12,
-                      spreadRadius: 1,
+                  child: TextField(
+                    controller: chatProvider.textController,
+                    enabled: !chatProvider.isLoading, // 🔒 disables typing
+                    style: TextStyle(
+                      color: chatProvider.isLoading
+                          ? Colors.white38
+                          : Colors.white,
                     ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.send_rounded,
-                  color: Colors.white,
-                  size: 20,
+                    decoration: InputDecoration(
+                      hintText: chatProvider.isLoading
+                          ? "Waiting for response..."
+                          : "Type a message...",
+                      hintStyle: TextStyle(
+                        color: chatProvider.isLoading
+                            ? Colors.grey[700]
+                            : Colors.grey[500],
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
+                      ),
+                    ),
+                    onSubmitted: chatProvider.isLoading
+                        ? null // 🔒 blocks Enter key too
+                        : (_) => chatProvider.sendMessage(),
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              GestureDetector(
+                onTap: chatProvider.isLoading
+                    ? null
+                    : chatProvider.sendMessage, // 🔒 blocks tap
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: chatProvider.isLoading
+                        ? const LinearGradient(
+                            colors: [Color(0xFF2A3A4A), Color(0xFF2A3A4A)],
+                          )
+                        : primaryGradient,
+                    boxShadow: chatProvider.isLoading
+                        ? []
+                        : [
+                            BoxShadow(
+                              color: const Color(0xFF00E5FF).withOpacity(0.4),
+                              blurRadius: 12,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                  ),
+                  child: const Icon(
+                    Icons.send_rounded,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -18,12 +18,13 @@ class ResumeUploadScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         foregroundColor: Colors.white,
         centerTitle: true,
         backgroundColor: bgColor,
         elevation: 0,
         title: Text(
-          "CAREER COMPASS",
+          "RESUME ANALYZER",
           style: GoogleFonts.poppins(
             color: Colors.white,
             fontWeight: FontWeight.bold,

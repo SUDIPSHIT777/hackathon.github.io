@@ -5,7 +5,6 @@ import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/signup/authwrapper.dart';
 import 'package:hackathon/screen/signup/signup.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
