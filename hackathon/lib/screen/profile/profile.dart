@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/screen/about/about_screen.dart';
 import 'package:hackathon/screen/login/login.dart';
@@ -246,7 +248,25 @@ class ProfileScreen extends StatelessWidget {
                                 },
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF2A1418),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: const Color(0xFF5C2429),
+                                  width: 1,
+                                ),
+                              ),
+                              child: _buildMenuRow(
+                                Icons.delete_forever_rounded,
+                                'Delete Account',
+                                Colors.red,
+                                Colors.red,
+                                isDestructive: true,
+                                onTap: () => _deleteAccount(context),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -330,5 +350,67 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> _deleteAccount(BuildContext context) async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) return;
+  final bool? confirm = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text("Delete Account"),
+      content: const Text(
+        "Are you sure you want to permanently delete your account?\n\n"
+        "This action cannot be undone.",
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text("Cancel"),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text("Delete", style: TextStyle(color: Colors.red)),
+        ),
+      ],
+    ),
+  );
+
+  if (confirm != true) return;
+
+  try {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .delete()
+        .catchError((_) {});
+
+    // Delete Firebase Authentication account
+    await user.delete();
+
+    Get.snackbar(
+      "Success",
+      "Account deleted successfully",
+      snackPosition: SnackPosition.BOTTOM,
+    );
+
+    Get.offAll(() => const LoginScreen());
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'requires-recent-login') {
+      Get.snackbar(
+        "Re-login Required",
+        "Please logout and login again before deleting your account.",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } else {
+      Get.snackbar(
+        "Error",
+        e.message ?? "Failed to delete account",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  } catch (e) {
+    Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
   }
 }
