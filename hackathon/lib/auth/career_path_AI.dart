@@ -3,11 +3,10 @@ import 'dart:developer';
 import 'package:hackathon/config/app_config.dart';
 import 'package:hackathon/model/career_path_model.dart';
 import 'package:http/http.dart' as http;
-Future<CareerPathModel?> getCareerPathAI(
-  String stream,
-  String degree,
-) async {
- String prompt = """
+
+Future<CareerPathModel?> getCareerPathAI(String stream, String degree) async {
+  String prompt =
+      """
 Stream: $stream
 Degree: $degree
 
@@ -50,7 +49,8 @@ Rules:
 - JSON only
 - No markdown
 - No explanation
-"""; try {
+""";
+  try {
     final response = await http.post(
       Uri.parse(AppConfig.api),
       headers: {
@@ -67,6 +67,7 @@ Rules:
           {"role": "user", "content": prompt},
         ],
         "temperature": 0.2,
+        "max_tokens": 500,
       }),
     );
 
@@ -76,10 +77,8 @@ Rules:
       var data = result["choices"][0]["message"]["content"];
 
       data = data.replaceAll("```json", "").replaceAll("```", "").trim();
-log("Career API Response: $data");
-return CareerPathModel.fromJson(
-  jsonDecode(data),
-);
+      log("Career API Response: $data");
+      return CareerPathModel.fromJson(jsonDecode(data));
     }
   } catch (e) {
     log("Stream AI Error: $e");

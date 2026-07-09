@@ -18,74 +18,7 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
   // Managing index variable tracking user selection
   int _selectedDegreeIdx = 0;
 
-  // Mock degree data extracted exactly from Step 2 of your reference image
-  // final List<Map<String, dynamic>> _degrees = [
-  //   {
-  //     'title': 'B.Tech Computer Science',
-  //     'duration': 'Duration: 4 Years',
-  //     'salary': '₹ 8 - 18 LPA',
-  //     'icon': Icons.code_rounded,
-  //     'iconColor': const Color(0xFF3B82F6),
-  //     'iconBg': const Color(0xFF0F2447),
-  //   },
-  //   {
-  //     'title': 'B.Sc',
-  //     'duration': 'Duration: 3 Years',
-  //     'salary': '₹ 3 - 6 LPA',
-  //     'icon': Icons.science_outlined,
-  //     'iconColor': const Color(0xFF00D2A0),
-  //     'iconBg': const Color(0xFF092524),
-  //   },
-  //   {
-  //     'title': 'BCA',
-  //     'duration': 'Duration: 3 Years',
-  //     'salary': '₹ 4 - 8 LPA',
-  //     'icon': Icons.terminal_rounded,
-  //     'iconColor': const Color(0xFFF59E0B),
-  //     'iconBg': const Color(0xFF2A2011),
-  //   },
-  //   {
-  //     'title': 'MBBS',
-  //     'duration': 'Duration: 5.5 Years',
-  //     'salary': '₹ 10 - 25 LPA',
-  //     'icon': Icons.health_and_safety_outlined,
-  //     'iconColor': const Color(0xFFEF4444),
-  //     'iconBg': const Color(0xFF2C141A),
-  //   },
-  //   {
-  //     'title': 'B.Pharm',
-  //     'duration': 'Duration: 4 Years',
-  //     'salary': '₹ 4 - 7 LPA',
-  //     'icon': Icons.medication_liquid_outlined,
-  //     'iconColor': const Color(0xFF8B5CF6),
-  //     'iconBg': const Color(0xFF1B1938),
-  //   },
-  //   {
-  //     'title': 'Biotechnology',
-  //     'duration': 'Duration: 4 Years',
-  //     'salary': '₹ 4 - 8 LPA',
-  //     'icon': Icons.biotech_outlined,
-  //     'iconColor': const Color(0xFF00A2E8),
-  //     'iconBg': const Color(0xFF08243A),
-  //   },
-  //   {
-  //     'title': 'Data Science',
-  //     'duration': 'Duration: 3-4 Years',
-  //     'salary': '₹ 6 - 14 LPA',
-  //     'icon': Icons.hub_outlined,
-  //     'iconColor': const Color(0xFFEC4899),
-  //     'iconBg': const Color(0xFF2B1428),
-  //   },
-  //   {
-  //     'title': 'Environmental Science',
-  //     'duration': 'Duration: 3 Years',
-  //     'salary': '₹ 3 - 6 LPA',
-  //     'icon': Icons.eco_outlined,
-  //     'iconColor': const Color(0xFF10B981),
-  //     'iconBg': const Color(0xFF0C251F),
-  //   },
-  // ];
-  @override
+   @override
   void initState() {
     super.initState();
 
@@ -194,66 +127,7 @@ class _DegreeChooserScreenState extends State<DegreeChooserScreen> {
                             ),
                             const SizedBox(height: 24),
 
-                            // --- SEARCH FILTER BAR WITH INTEGRATED TUNING ICON ---
-                            // Row(
-                            //   children: [
-                            //     Expanded(
-                            //       child: Container(
-                            //         height: 50,
-                            //         decoration: BoxDecoration(
-                            //           color: colorSearchBg,
-                            //           borderRadius: BorderRadius.circular(12),
-                            //           border: Border.all(
-                            //             color: colorBorderDefault,
-                            //             width: 1,
-                            //           ),
-                            //         ),
-                            //         child: const TextField(
-                            //           style: TextStyle(
-                            //             color: colorTextWhite,
-                            //             fontSize: 14,
-                            //           ),
-                            //           decoration: InputDecoration(
-                            //             hintText: 'Search course',
-                            //             hintStyle: TextStyle(
-                            //               color: Color(0xFF435368),
-                            //               fontSize: 14,
-                            //             ),
-                            //             prefixIcon: Icon(
-                            //               Icons.search,
-                            //               color: Color(0xFF435368),
-                            //               size: 20,
-                            //             ),
-                            //             border: InputBorder.none,
-                            //             contentPadding: EdgeInsets.symmetric(
-                            //               vertical: 14,
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //     const SizedBox(width: 12),
-                            //     // Tuning option icon block
-                            //     Container(
-                            //       height: 50,
-                            //       width: 50,
-                            //       decoration: BoxDecoration(
-                            //         color: colorSearchBg,
-                            //         borderRadius: BorderRadius.circular(12),
-                            //         border: Border.all(
-                            //           color: colorBorderDefault,
-                            //           width: 1,
-                            //         ),
-                            //       ),
-                            //       child: const Icon(
-                            //         Icons.tune_rounded,
-                            //         color: Color(0xFF3B82F6),
-                            //         size: 20,
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                            const SizedBox(height: 24),
+                              const SizedBox(height: 24),
                             Consumer<DegreeChooserController>(
                               builder: (context, controller, child) {
                                 if (controller.isLoading) {

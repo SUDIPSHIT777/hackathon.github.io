@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
 import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/login/login.dart';
 
@@ -20,17 +22,14 @@ class _CareerCompassPageState extends State<CareerCompassPage> {
     Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const AuthGate()),
-      );
+      Get.offAll(() => AuthGate(), transition: Transition.fade);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF01121A),
+      backgroundColor: const Color(0xff051429),
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -39,8 +38,7 @@ class _CareerCompassPageState extends State<CareerCompassPage> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFF041E26), Color(0xFF02161E), Color(0xFF010D14)],
-              stops: [0.0, 0.5, 1.0],
+              colors: [Color(0xFF071B36), Color(0xFF051429), Color(0xFF041122)],
             ),
           ),
           child: Stack(
@@ -296,7 +294,7 @@ class _CompassIllustration extends StatelessWidget {
   }
 }
 
- class _MiniCompass extends StatelessWidget {
+class _MiniCompass extends StatelessWidget {
   const _MiniCompass();
 
   @override
@@ -463,22 +461,22 @@ class MainCompassPainter extends CustomPainter {
     _drawArrowCap(canvas, Offset(center.dx, center.dy - radius * 0.94));
     _drawCardinalText(
       canvas,
-      'A',
+      'N',
       Offset(center.dx, center.dy - radius * 0.66),
     );
     _drawCardinalText(
       canvas,
-      'G',
+      'E',
       Offset(center.dx + radius * 0.68, center.dy),
     );
     _drawCardinalText(
       canvas,
-      'O',
+      'S',
       Offset(center.dx, center.dy + radius * 0.68),
     );
     _drawCardinalText(
       canvas,
-      'S',
+      'W',
       Offset(center.dx - radius * 0.68, center.dy),
     );
   }

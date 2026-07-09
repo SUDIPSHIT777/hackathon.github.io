@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/screen/about/about_screen.dart';
+import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
 import 'package:hackathon/screen/login/login.dart';
 import 'package:hackathon/screen/privecy_policy.dart';
 import 'package:hackathon/screen/signup/authwrapper.dart';
@@ -35,247 +37,262 @@ class ProfileScreen extends StatelessWidget {
     const Color borderStrokeColor = Color(0xFF1E324A);
     const Color accentColor = Color(0xFF00D2A0);
 
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        leading: const SizedBox(),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          "PROFILE",
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            letterSpacing: 1.2,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Get.offAll(() => BottomNav(), transition: Transition.leftToRight);
+      },
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          leading: const SizedBox(),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(
+            "PROFILE",
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              letterSpacing: 1.2,
+            ),
           ),
+
+          centerTitle: true,
         ),
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final bool isWideDisplay = constraints.maxWidth > 600;
+              final double horizontalPadding = isWideDisplay ? 64.0 : 20.0;
 
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final bool isWideDisplay = constraints.maxWidth > 600;
-            final double horizontalPadding = isWideDisplay ? 64.0 : 20.0;
+              return Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding,
+                            vertical: 10,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 20),
 
-            return Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 500),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: horizontalPadding,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 20),
-
-                            // --- PREMIUM USER AVATAR WITH BADGE ---
-                            Center(
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: accentColor.withOpacity(0.4),
-                                        width: 2.5,
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: accentColor.withOpacity(0.1),
-                                          blurRadius: 16,
-                                          spreadRadius: 2,
-                                        ),
-                                      ],
-                                    ),
-                                    child: CircleAvatar(
-                                      radius: 50,
-                                      backgroundColor: cardBackgroundColor,
-                                      child: Icon(
-                                        Icons.person_rounded,
-                                        size: 54,
-                                        color: textMutedColor.withOpacity(0.8),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(7),
+                              // --- PREMIUM USER AVATAR WITH BADGE ---
+                              Center(
+                                child: Stack(
+                                  children: [
+                                    Container(
                                       decoration: BoxDecoration(
-                                        color: accentColor,
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                          color: backgroundColor,
+                                          color: accentColor.withOpacity(0.4),
                                           width: 2.5,
                                         ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black.withOpacity(
-                                              0.3,
-                                            ),
-                                            blurRadius: 6,
-                                            offset: const Offset(0, 3),
+                                            color: accentColor.withOpacity(0.1),
+                                            blurRadius: 16,
+                                            spreadRadius: 2,
                                           ),
                                         ],
                                       ),
-                                      // child: const Icon(
-                                      //   Icons.camera_alt_rounded,
-                                      //   color: backgroundColor,
-                                      //   size: 15,
-                                      // ),
+                                      child: CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor: cardBackgroundColor,
+                                        child: Icon(
+                                          Icons.person_rounded,
+                                          size: 54,
+                                          color: textMutedColor.withOpacity(
+                                            0.8,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // --- USER META DATA ---
-                            Text(
-                              userName,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: textWhiteColor,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              userEmail,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: textMutedColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            const SizedBox(height: 32),
-
-                            // --- SETTINGS & INFO MENU CARD ---
-                            Container(
-                              decoration: BoxDecoration(
-                                color: cardBackgroundColor,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: borderStrokeColor,
-                                  width: 1,
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(7),
+                                        decoration: BoxDecoration(
+                                          color: accentColor,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: backgroundColor,
+                                            width: 2.5,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(
+                                                0.3,
+                                              ),
+                                              blurRadius: 6,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        // child: const Icon(
+                                        //   Icons.camera_alt_rounded,
+                                        //   color: backgroundColor,
+                                        //   size: 15,
+                                        // ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              child: Column(
-                                children: [
-                                  _buildMenuRow(
-                                    Icons.privacy_tip_outlined,
-                                    'Privacy Policy',
-                                    actionIconColor,
-                                    textWhiteColor,
-                                    onTap: () {
-                                      Get.to(() => PrivacyPolicyScreen());
-                                    },
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                    ),
-                                    child: Divider(
-                                      color: borderStrokeColor.withOpacity(0.6),
-                                      height: 1,
-                                    ),
-                                  ),
-                                  _buildMenuRow(
-                                    Icons.settings_applications,
-                                    'About App',
-                                    actionIconColor,
-                                    textWhiteColor,
-                                    subtitle: 'About the',
-                                    onTap: () {
-                                      Get.to(() => AboutAppScreen());
-                                    },
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                    ),
-                                    child: Divider(
-                                      color: borderStrokeColor.withOpacity(0.6),
-                                      height: 1,
-                                    ),
-                                  ),
-                                  _buildMenuRow(
-                                    Icons.info_outline_rounded,
-                                    'Version Info',
-                                    actionIconColor,
-                                    textWhiteColor,
-                                    subtitle: 'V.0.1',
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
+                              const SizedBox(height: 20),
 
-                            // --- LOGOUT BUTTON CARD ---
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(
-                                  0xFF2A1418,
-                                ), // Subtle red tint background
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: const Color(0xFF5C2429),
-                                  width: 1,
+                              // --- USER META DATA ---
+                              Text(
+                                userName,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: textWhiteColor,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.3,
                                 ),
                               ),
-                              child: _buildMenuRow(
-                                Icons.logout_rounded,
-                                'Logout Account',
-                                const Color(0xFFE63946),
-                                const Color(0xFFE63946),
-                                isDestructive: true,
-                                onTap: () async {
-                                  await context.read<AuthController>().logout();
-                                  Get.offAll(() => const LoginScreen());
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF2A1418),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: const Color(0xFF5C2429),
-                                  width: 1,
+                              const SizedBox(height: 6),
+                              Text(
+                                userEmail,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: textMutedColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              child: _buildMenuRow(
-                                Icons.delete_forever_rounded,
-                                'Delete Account',
-                                Colors.red,
-                                Colors.red,
-                                isDestructive: true,
-                                onTap: () => _deleteAccount(context),
+                              const SizedBox(height: 32),
+
+                              // --- SETTINGS & INFO MENU CARD ---
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: cardBackgroundColor,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: borderStrokeColor,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    _buildMenuRow(
+                                      Icons.privacy_tip_outlined,
+                                      'Privacy Policy',
+                                      actionIconColor,
+                                      textWhiteColor,
+                                      onTap: () {
+                                        Get.to(() => PrivacyPolicyScreen());
+                                      },
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0,
+                                      ),
+                                      child: Divider(
+                                        color: borderStrokeColor.withOpacity(
+                                          0.6,
+                                        ),
+                                        height: 1,
+                                      ),
+                                    ),
+                                    _buildMenuRow(
+                                      Icons.settings_applications,
+                                      'About App',
+                                      actionIconColor,
+                                      textWhiteColor,
+                                      subtitle: 'About the',
+                                      onTap: () {
+                                        Get.to(() => AboutAppScreen());
+                                      },
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0,
+                                      ),
+                                      child: Divider(
+                                        color: borderStrokeColor.withOpacity(
+                                          0.6,
+                                        ),
+                                        height: 1,
+                                      ),
+                                    ),
+                                    _buildMenuRow(
+                                      Icons.info_outline_rounded,
+                                      'Version Info',
+                                      actionIconColor,
+                                      textWhiteColor,
+                                      subtitle: 'V.0.1',
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 20),
+
+                              // --- LOGOUT BUTTON CARD ---
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(
+                                    0xFF2A1418,
+                                  ), // Subtle red tint background
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: const Color(0xFF5C2429),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: _buildMenuRow(
+                                  Icons.logout_rounded,
+                                  'Logout Account',
+                                  const Color(0xFFE63946),
+                                  const Color(0xFFE63946),
+                                  isDestructive: true,
+                                  onTap: () async {
+                                    await context
+                                        .read<AuthController>()
+                                        .logout();
+                                    Get.offAll(() => const LoginScreen());
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF2A1418),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: const Color(0xFF5C2429),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: _buildMenuRow(
+                                  Icons.delete_forever_rounded,
+                                  'Delete Account',
+                                  Colors.red,
+                                  Colors.red,
+                                  isDestructive: true,
+                                  onTap: () => _deleteAccount(context),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

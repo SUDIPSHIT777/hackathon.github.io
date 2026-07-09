@@ -20,7 +20,6 @@ class ResumeResultScreen extends StatefulWidget {
 
 class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
     with SingleTickerProviderStateMixin {
-
   // Animated score value
   late AnimationController _scoreAnimController;
   late Animation<double> _scoreAnim;
@@ -73,188 +72,195 @@ class _ResumeAnalysisResultsScreenState extends State<ResumeResultScreen>
         final double scorePercent = (score / 100).clamp(0.0, 1.0);
         final Color accentColor = _scoreColor(score);
 
-        return Scaffold(
-          backgroundColor: colorBg,
-          appBar: AppBar(
-            surfaceTintColor: Colors.transparent,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: colorTextWhite),
-              onPressed: () =>
-                  Get.offAll(() => BottomNav(), transition: Transition.fade),
-            ),
-            title: Text(
-              "RESUME RESULT",
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                letterSpacing: 1.2,
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
+            Get.offAll(() => BottomNav(), transition: Transition.fade);
+          },
+          child: Scaffold(
+            backgroundColor: colorBg,
+            appBar: AppBar(
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: colorTextWhite),
+                onPressed: () =>
+                    Get.offAll(() => BottomNav(), transition: Transition.fade),
               ),
+              title: Text(
+                "RESUME RESULT",
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              centerTitle: true,
             ),
-            centerTitle: true,
-          ),
-          body: SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final bool isWide = constraints.maxWidth > 650;
-                final double hPad = isWide ? 48.0 : 16.0;
+            body: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final bool isWide = constraints.maxWidth > 650;
+                  final double hPad = isWide ? 48.0 : 16.0;
 
-                return Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
-                    child: Column(
-                      children: [
-                        // // ── Tab bar ──────────────────────────────────────────
-                        // Padding(
-                        //   padding: EdgeInsets.symmetric(
-                        //     horizontal: hPad,
-                        //     vertical: 8,
-                        //   ),
-                        //   child: Container(
-                        //     padding: const EdgeInsets.all(4),
-                        //     decoration: BoxDecoration(
-                        //       color: colorTabBg,
-                        //       borderRadius: BorderRadius.circular(12),
-                        //     ),
-                        //     child: SingleChildScrollView(
-                        //       scrollDirection: Axis.horizontal,
-                        //       child: Row(
-                        //         children: [
-                        //           _buildSubTab(0, 'Overview'),
-                        //           _buildSubTab(1, 'Detailed Result'),
-                        //           _buildSubTab(2, 'Step-by-Step'),
-                        //           _buildSubTab(3, 'Summary'),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
+                  return Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      child: Column(
+                        children: [
+                          // // ── Tab bar ──────────────────────────────────────────
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(
+                          //     horizontal: hPad,
+                          //     vertical: 8,
+                          //   ),
+                          //   child: Container(
+                          //     padding: const EdgeInsets.all(4),
+                          //     decoration: BoxDecoration(
+                          //       color: colorTabBg,
+                          //       borderRadius: BorderRadius.circular(12),
+                          //     ),
+                          //     child: SingleChildScrollView(
+                          //       scrollDirection: Axis.horizontal,
+                          //       child: Row(
+                          //         children: [
+                          //           _buildSubTab(0, 'Overview'),
+                          //           _buildSubTab(1, 'Detailed Result'),
+                          //           _buildSubTab(2, 'Step-by-Step'),
+                          //           _buildSubTab(3, 'Summary'),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
 
-                        // ── Scrollable body ──────────────────────────────────
-                        Expanded(
-                          child: SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: hPad,
-                              vertical: 12,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // 1. Score card (now dynamic + animated)
-                                _buildOverallScoreCard(
-                                  resume.name,
-                                  score,
-                                  scorePercent,
-                                  accentColor,
-                                  resume.summary,
-                                ),
-                                const SizedBox(height: 24),
+                          // ── Scrollable body ──────────────────────────────────
+                          Expanded(
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: hPad,
+                                vertical: 12,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // 1. Score card (now dynamic + animated)
+                                  _buildOverallScoreCard(
+                                    resume.name,
+                                    score,
+                                    scorePercent,
+                                    accentColor,
+                                    resume.summary,
+                                  ),
+                                  const SizedBox(height: 24),
 
-                                // 2. Missing Skills (from Screen 2)
-                                _buildSectionHeader(
-                                  'Missing Skills',
-                                  Colors.amber,
-                                ),
-                                const SizedBox(height: 12),
-                                _buildMissingSkillsCard(resume.missingSkills),
-                                const SizedBox(height: 24),
+                                  // 2. Missing Skills (from Screen 2)
+                                  _buildSectionHeader(
+                                    'Missing Skills',
+                                    Colors.amber,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  _buildMissingSkillsCard(resume.missingSkills),
+                                  const SizedBox(height: 24),
 
-                                // 3. Critical Gaps (now dynamic)
-                                _buildSectionHeader(
-                                  'Critical Gaps',
-                                  colorRedAccent,
-                                ),
-                                const SizedBox(height: 12),
-                                _buildDynamicCardList(
-                                  resume.criticalGaps,
-                                  Icons.info,
-                                  colorRedAccent,
-                                ),
-                                const SizedBox(height: 24),
+                                  // 3. Critical Gaps (now dynamic)
+                                  _buildSectionHeader(
+                                    'Critical Gaps',
+                                    colorRedAccent,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  _buildDynamicCardList(
+                                    resume.criticalGaps,
+                                    Icons.info,
+                                    colorRedAccent,
+                                  ),
+                                  const SizedBox(height: 24),
 
-                                // 4. Key Strengths (now dynamic)
-                                _buildSectionHeader(
-                                  'Key Strengths',
-                                  colorBlueAccent,
-                                ),
-                                const SizedBox(height: 12),
-                                _buildDynamicCardList(
-                                  resume.keyStrengths,
-                                  Icons.done_all_sharp,
-                                  colorBlueAccent,
-                                ),
-                                const SizedBox(height: 24),
+                                  // 4. Key Strengths (now dynamic)
+                                  _buildSectionHeader(
+                                    'Key Strengths',
+                                    colorBlueAccent,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  _buildDynamicCardList(
+                                    resume.keyStrengths,
+                                    Icons.done_all_sharp,
+                                    colorBlueAccent,
+                                  ),
+                                  const SizedBox(height: 24),
 
-                                // 5. Step-by-Step Optimization (now dynamic)
-                                _buildSectionHeader(
-                                  'Step-by-Step Optimization',
-                                  colorMint,
-                                ),
-                                const SizedBox(height: 12),
-                                _buildOptimizationStepsList(
-                                  resume.optimizationSteps,
-                                ),
-                                const SizedBox(height: 24),
+                                  // 5. Step-by-Step Optimization (now dynamic)
+                                  _buildSectionHeader(
+                                    'Step-by-Step Optimization',
+                                    colorMint,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  _buildOptimizationStepsList(
+                                    resume.optimizationSteps,
+                                  ),
+                                  const SizedBox(height: 24),
 
-                                // 6. AI Recommendation & Market Match (now dynamic)
-                                isWide
-                                    ? Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: _buildAiRecommendationCard(
+                                  // 6. AI Recommendation & Market Match (now dynamic)
+                                  isWide
+                                      ? Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: _buildAiRecommendationCard(
+                                                resume.aiRecommendation,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 12),
+                                            Expanded(
+                                              child: _buildMarketMatchCard(
+                                                resume.marketMatch,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Column(
+                                          children: [
+                                            _buildAiRecommendationCard(
                                               resume.aiRecommendation,
                                             ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          Expanded(
-                                            child: _buildMarketMatchCard(
+                                            const SizedBox(height: 12),
+                                            _buildMarketMatchCard(
                                               resume.marketMatch,
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    : Column(
-                                        children: [
-                                          _buildAiRecommendationCard(
-                                            resume.aiRecommendation,
-                                          ),
-                                          const SizedBox(height: 12),
-                                          _buildMarketMatchCard(
-                                            resume.marketMatch,
-                                          ),
-                                        ],
-                                      ),
-                                const SizedBox(height: 20),
+                                          ],
+                                        ),
+                                  const SizedBox(height: 20),
 
-                                // 7. Motivational footer text (from Screen 2)
-                                Center(
-                                  child: Text(
-                                    'Every improvement here brings you closer to your dream job.'
-                                        .toUpperCase(),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: colorTextMuted,
-                                      fontSize: 11,
-                                      letterSpacing: 1.5,
+                                  // 7. Motivational footer text (from Screen 2)
+                                  Center(
+                                    child: Text(
+                                      'Every improvement here brings you closer to your dream job.'
+                                          .toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: colorTextMuted,
+                                        fontSize: 11,
+                                        letterSpacing: 1.5,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: 32),
-                              ],
+                                  const SizedBox(height: 32),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         );

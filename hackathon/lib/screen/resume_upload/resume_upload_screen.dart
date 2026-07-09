@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hackathon/screen/bottomNav/bottom_nav.dart';
+import 'package:hackathon/screen/home/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:hackathon/screen/resume_upload/controller/resume_upload_controller.dart';
 
@@ -15,177 +19,186 @@ class ResumeUploadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: bgColor,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        foregroundColor: Colors.white,
-        centerTitle: true,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Get.offAll(() => BottomNav(), transition: Transition.leftToRight);
+      },
+      child: Scaffold(
         backgroundColor: bgColor,
-        elevation: 0,
-        title: Text(
-          "RESUME ANALYZER",
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            letterSpacing: 1.2,
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          foregroundColor: Colors.white,
+          centerTitle: true,
+          backgroundColor: bgColor,
+          elevation: 0,
+          title: Text(
+            "RESUME ANALYZER",
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              letterSpacing: 1.2,
+            ),
           ),
         ),
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          // Adjust margins and structural limits based on screen widths
-          final double horizontalPadding = constraints.maxWidth > 700
-              ? 48.0
-              : 20.0;
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            // Adjust margins and structural limits based on screen widths
+            final double horizontalPadding = constraints.maxWidth > 700
+                ? 48.0
+                : 20.0;
 
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding,
-              vertical: 24,
-            ),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 900),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Glow Header Icon Area
-                    Center(
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(
-                            colors: [
-                              accentCyan.withOpacity(.25),
-                              Colors.transparent,
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: 24,
+              ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 900),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Glow Header Icon Area
+                      Center(
+                        child: Container(
+                          width: 90,
+                          height: 90,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: RadialGradient(
+                              colors: [
+                                accentCyan.withOpacity(.25),
+                                Colors.transparent,
+                              ],
+                            ),
+                            border: Border.all(
+                              color: accentCyan.withOpacity(.4),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.upload_file_outlined,
+                            color: accentCyan,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Title
+                      const Center(
+                        child: Text.rich(
+                          textAlign: TextAlign.center,
+                          TextSpan(
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: "Upload Your ",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              TextSpan(
+                                text: "Resume",
+                                style: TextStyle(color: accentCyan),
+                              ),
                             ],
                           ),
-                          border: Border.all(
-                            color: accentCyan.withOpacity(.4),
-                            width: 1.5,
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.upload_file_outlined,
-                          color: accentCyan,
-                          size: 40,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 24),
+                      const SizedBox(height: 12),
 
-                    // Title
-                    const Center(
-                      child: Text.rich(
+                      const Text(
+                        "Upload your resume to get personalized career recommendations based on your skills and experience.",
                         textAlign: TextAlign.center,
-                        TextSpan(
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: "Upload Your ",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            TextSpan(
-                              text: "Resume",
-                              style: TextStyle(color: accentCyan),
-                            ),
-                          ],
+                        style: TextStyle(
+                          color: textMuted,
+                          fontSize: 14,
+                          height: 1.4,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
+                      const SizedBox(height: 32),
 
-                    const Text(
-                      "Upload your resume to get personalized career recommendations based on your skills and experience.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: textMuted,
-                        fontSize: 14,
-                        height: 1.4,
+                      // Interactive State Area
+                      Consumer<ResumeUploadController>(
+                        builder: (context, controller, child) {
+                          if (controller.fileName.isNotEmpty) {
+                            return _selectedFileCard(context, controller);
+                          }
+                          return _uploadArea(context);
+                        },
                       ),
-                    ),
-                    const SizedBox(height: 32),
+                      const SizedBox(height: 40),
 
-                    // Interactive State Area
-                    Consumer<ResumeUploadController>(
-                      builder: (context, controller, child) {
-                        if (controller.fileName.isNotEmpty) {
-                          return _selectedFileCard(context, controller);
-                        }
-                        return _uploadArea(context);
-                      },
-                    ),
-                    const SizedBox(height: 40),
-
-                    // Tips Header Section
-                    const Text(
-                      "Tips for best results",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      // Tips Header Section
+                      const Text(
+                        "Tips for best results",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                    // Responsive Tip Cards Layout that adapts to content height
-                    LayoutBuilder(
-                      builder: (context, gridConstraints) {
-                        // If screen is wide, split into multi-column math; on mobile, take full width.
-                        final double cardWidth = gridConstraints.maxWidth > 600
-                            ? (gridConstraints.maxWidth - 32) /
-                                  3 // 3 columns on wide screens (accounting for 16px spacing)
-                            : gridConstraints.maxWidth; // Full width on mobile
+                      // Responsive Tip Cards Layout that adapts to content height
+                      LayoutBuilder(
+                        builder: (context, gridConstraints) {
+                          // If screen is wide, split into multi-column math; on mobile, take full width.
+                          final double cardWidth =
+                              gridConstraints.maxWidth > 600
+                              ? (gridConstraints.maxWidth - 32) /
+                                    3 // 3 columns on wide screens (accounting for 16px spacing)
+                              : gridConstraints
+                                    .maxWidth; // Full width on mobile
 
-                        return Wrap(
-                          spacing: 16, // Horizontal space between cards
-                          runSpacing: 16, // Vertical space between rows
-                          children: [
-                            SizedBox(
-                              width: cardWidth,
-                              child: _tipCard(
-                                Icons.badge_outlined,
-                                "Use Updated Resume",
-                                "Make sure your resume is up to date with your latest details.",
-                                const Color(0xFF6A1B9A),
+                          return Wrap(
+                            spacing: 16, // Horizontal space between cards
+                            runSpacing: 16, // Vertical space between rows
+                            children: [
+                              SizedBox(
+                                width: cardWidth,
+                                child: _tipCard(
+                                  Icons.badge_outlined,
+                                  "Use Updated Resume",
+                                  "Make sure your resume is up to date with your latest details.",
+                                  const Color(0xFF6A1B9A),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: cardWidth,
-                              child: _tipCard(
-                                Icons.list_alt_rounded,
-                                "Include Key Details",
-                                "Mention core professional skills, unique projects, and education backgrounds.",
-                                const Color(0xFF1565C0),
+                              SizedBox(
+                                width: cardWidth,
+                                child: _tipCard(
+                                  Icons.list_alt_rounded,
+                                  "Include Key Details",
+                                  "Mention core professional skills, unique projects, and education backgrounds.",
+                                  const Color(0xFF1565C0),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: cardWidth,
-                              child: _tipCard(
-                                Icons.track_changes_outlined,
-                                "Highlight Achievements",
-                                "Showcase measurable metrics and real-world impact goals.",
-                                const Color(0xFF2E7D32),
+                              SizedBox(
+                                width: cardWidth,
+                                child: _tipCard(
+                                  Icons.track_changes_outlined,
+                                  "Highlight Achievements",
+                                  "Showcase measurable metrics and real-world impact goals.",
+                                  const Color(0xFF2E7D32),
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

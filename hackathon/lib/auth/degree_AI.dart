@@ -4,10 +4,9 @@ import 'package:hackathon/config/app_config.dart';
 import 'package:hackathon/model/degreeModel.dart';
 import 'package:http/http.dart' as http;
 
- Future<DegreeResponseModel?> getDegreesAI(
-  String stream,
-) async {
-  String prompt = """
+Future<DegreeResponseModel?> getDegreesAI(String stream) async {
+  String prompt =
+      """
 Return the most popular degrees for the stream: $stream
 
 Return ONLY valid JSON.
@@ -23,7 +22,7 @@ Return ONLY valid JSON.
 }
 
 Rules:
-- Return 8 degrees
+- Return ALL degrees
 - duration example: 4 Years
 - salary example: ₹ 5 - 12 LPA
 - JSON only
@@ -46,9 +45,10 @@ Rules:
           {"role": "user", "content": prompt},
         ],
         "temperature": 0.2,
+        "max_tokens": 500,
       }),
     );
-
+    log(response.body.toString());
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
 

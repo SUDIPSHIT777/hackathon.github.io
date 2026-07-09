@@ -279,6 +279,7 @@ class _PathChooserScreenState extends State<PathChooserScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Column(
                                   children: career.careers
                                       .asMap()
@@ -291,7 +292,7 @@ class _PathChooserScreenState extends State<PathChooserScreen> {
                                           child: _buildRecommendationItem(
                                             entry.key + 1,
                                             entry.value,
-                                            '${95 - (entry.key * 3)}% Match',
+                                            // '${95 - (entry.key * 3)}% Match',
                                             [
                                               const Color(0xFF3B82F6),
                                               const Color(0xFF8B5CF6),
@@ -399,64 +400,67 @@ class _PathChooserScreenState extends State<PathChooserScreen> {
   Widget _buildRecommendationItem(
     int num,
     String role,
-    String percent,
+    // String percent,
     Color badgeColor,
     Color bg,
     Color border,
   ) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: border),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 22,
-            height: 22,
-            decoration: BoxDecoration(
-              color: badgeColor.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Center(
-              child: Text(
-                '$num',
-                style: TextStyle(
-                  color: badgeColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () => CareerPathController.lunch(role),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: border),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                color: badgeColor.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Center(
+                child: Text(
+                  '$num',
+                  style: TextStyle(
+                    color: badgeColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              role,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 13.5,
-                fontWeight: FontWeight.w600,
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                role,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          Text(
-            percent,
-            style: const TextStyle(
-              color: Color(0xFF00D2A0),
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+            // Text(
+            //   percent,
+            //   style: const TextStyle(
+            //     color: Color(0xFF00D2A0),
+            //     fontSize: 12,
+            //     fontWeight: FontWeight.w500,
+            //   ),
+            // ),
+            const SizedBox(width: 8),
+            const Icon(
+              Icons.arrow_outward_outlined,
+              color: Color(0xFF33475E),
+              size: 16,
             ),
-          ),
-          const SizedBox(width: 8),
-          const Icon(
-            Icons.chevron_right_rounded,
-            color: Color(0xFF33475E),
-            size: 16,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

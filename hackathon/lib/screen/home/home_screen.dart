@@ -245,7 +245,7 @@ class _ProgressCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Your overall goal Progress',
+                          'Your today\'s goal Progress',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
