@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hackathon/model/internshipmodel.dart';
 import 'package:hackathon/screen/internship/controller/intershipcontroller.dart';
+import 'package:hackathon/screen/internship/ui/skalitonui.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InternshipDashboard extends StatefulWidget {
@@ -91,8 +93,10 @@ class _InternshipDashboardState extends State<InternshipDashboard> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
+                            return ListView.builder(
+                              itemCount: 10,
+                              itemBuilder: (context, index) =>
+                                  const InternshipSkeletonCard(),
                             );
                           }
                           if (snapshot.hasError) {
@@ -274,11 +278,16 @@ class _InternshipDashboardState extends State<InternshipDashboard> {
                             fit: BoxFit.contain,
                             loadingBuilder: (context, child, progress) {
                               if (progress == null) return child;
-                              return const SizedBox(
-                                height: 18,
-                                width: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
+
+                              return Skeletonizer(
+                                enabled: true,
+                                child: Container(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
                               );
                             },
@@ -357,11 +366,6 @@ class _InternshipDashboardState extends State<InternshipDashboard> {
                       ),
                     ],
                   ),
-                ),
-                const Icon(
-                  Icons.bookmark_border_rounded,
-                  color: Colors.white70,
-                  size: 22,
                 ),
               ],
             ),

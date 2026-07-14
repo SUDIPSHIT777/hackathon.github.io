@@ -16,28 +16,26 @@ class InternshipService {
     }
 
     try {
-      final response = await http
-          .post(
-            Uri.parse(AppConfig.api),
-            headers: {
-              'Authorization': 'Bearer ${AppConfig.apikey}',
-              'Content-Type': 'application/json',
+      final response = await http.post(
+        Uri.parse(AppConfig.api),
+        headers: {
+          'Authorization': 'Bearer ${AppConfig.apikey}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "model": "deepseek/deepseek-chat",
+          "messages": [
+            {
+              "role": "system",
+              "content":
+                  "You are a JSON API. Return ONLY a valid JSON array. No markdown, no commentary, no trailing text.",
             },
-            body: jsonEncode({
-              "model": "deepseek/deepseek-chat",
-              "messages": [
-                {
-                  "role": "system",
-                  "content":
-                      "You are a JSON API. Return ONLY a valid JSON array. No markdown, no commentary, no trailing text.",
-                },
-                {"role": "user", "content": _buildPrompt(role)},
-              ],
-              "temperature": 0.3,
-              "max_tokens": 2000, // was 1000 — too tight for 10 full items, caused truncated/broken JSON
-            }),
-          )
-          .timeout(const Duration(seconds: 25));
+            {"role": "user", "content": _buildPrompt(role)},
+          ],
+          "temperature": 0.3,
+          "max_tokens": 4000,
+        }),
+      );
 
       if (response.statusCode != 200) {
         throw Exception("API Error ${response.statusCode}");
@@ -61,8 +59,6 @@ class InternshipService {
 
       _cache[cacheKey] = internships;
       return internships;
-    } on TimeoutException {
-      throw Exception("Request timed out. Please try again.");
     } catch (e) {
       rethrow;
     }
@@ -74,7 +70,7 @@ class InternshipService {
         : role.trim();
 
     return """
-Generate 10 real, currently-open internships in India for: $target.
+Generate 15 real, currently-open internships in India for: $target.
 Rules:
 - Use real, well-known companies only.
 - applyUrl must be the company's actual internship/careers page.
